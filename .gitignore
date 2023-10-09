@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
-/build
-/.svelte-kit
+.svelte-kit
 /package
 .env
 .env.*
@@ -11,3 +10,4 @@ vite.config.ts.timestamp-*
 pnpm-lock.yaml
 .DS_Store
 .vscode/
+build/
