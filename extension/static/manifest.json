@@ -1,14 +1,15 @@
 {
-	"name": "sveltekit-extension-template",
-	"description": "Example Chrome extension built with Sveltekit and Skeleton",
+	"name": "studysphere",
+	"description": "Supercharge your notes anywhere!",
 	"version": "0.0.1",
 	"manifest_version": 3,
+	"permissions": ["activeTab"],
 	"icons": {
 		"32": "favicon.png"
 	},
 	"action": {
 		"default_popup": "index.html",
 		"default_icon": "favicon.png",
-		"default_title": "sveltekit-extension-template"
+		"default_title": "Study Sphere"
 	}
 }
