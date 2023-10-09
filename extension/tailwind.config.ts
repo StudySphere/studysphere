@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { skeleton } from '@skeletonlabs/tw-plugin';
 import forms from '@tailwindcss/forms';
-import {studysphere} from './src/studysphere-theme';
+import { studysphere } from './src/studysphere-theme';
 import typography from '@tailwindcss/typography';
 
 const config = {
