@@ -1,6 +1,6 @@
 import { messages, topics } from '../stores';
-const API = 'https://studysphere-parser.arguflow.ai/api';
-
+const PARSER_API = 'https://studysphere-parser.arguflow.ai/api';
+const BACKEND_API = 'https://studysphere-backend.arguflow.ai/api';
 export function uploadData() {}
 
 export function uploadGDrive() {}
@@ -14,7 +14,7 @@ export function arguflowLogin() {}
 export function arguflowLogout() {}
 
 export function chat(topic_id: string, message: string) {
-	fetch(`${API}/messages`, {
+	fetch(`${BACKEND_API}/messages`, {
 		method: 'POST',
 		headers: {
 			'Access-Control-Allow-Origin': '*',
@@ -49,7 +49,7 @@ export function chat(topic_id: string, message: string) {
 }
 
 export function topicGenerate(prompt: string, normal_chat: boolean) {
-	fetch(`${API}/topic`, {
+	fetch(`${BACKEND_API}/topic`, {
 		method: 'POST',
 		headers: {
 			'Access-Control-Allow-Origin': '*',
@@ -76,7 +76,7 @@ export function topicGenerate(prompt: string, normal_chat: boolean) {
 }
 
 export function authorize() {
-	const res = fetch(`${API}/authorize`, {
+	const res = fetch(`${PARSER_API}/authorize`, {
 		method: 'GET',
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -91,7 +91,7 @@ export function authorize() {
 }
 
 export function arguflowRegister(email: string, password: string) {
-	const res = fetch(`${API}/arguflow_register`, {
+	const res = fetch(`${PARSER_API}/arguflow_register`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
