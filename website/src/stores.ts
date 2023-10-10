@@ -8,7 +8,8 @@ const lorem = faker.lorem.paragraph();
 // export const user = writable(storedUser || 'No user!');
 // storedUser.subscribe((value: string) => (localStorage.user = value));
 export const user = writable('');
-
+export const messages = writable([]);
+export const topics = writable([]);
 export const messageFeed = writable<Message[]>([
 	{
 		id: 0,

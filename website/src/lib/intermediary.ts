@@ -1,4 +1,5 @@
-const API = 'https://studysphere-parser.arguflow.ai';
+import { messages, topics } from '../stores';
+const API = 'https://studysphere-parser.arguflow.ai/api';
 
 export function uploadData() {}
 
@@ -11,6 +12,64 @@ export function clear() {}
 export function arguflowLogin() {}
 
 export function arguflowLogout() {}
+
+export function chat(topic_id: string, message: string) {
+	fetch(`${API}/messages`, {
+		method: 'POST',
+		headers: {
+			'Access-Control-Allow-Origin': '*',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			topic_id: topic_id,
+			new_message_content: message
+		})
+	}).then((res) => {
+		const reader = res.body?.getReader();
+		let done = false;
+		while (!done) {
+			reader!.read().then(({ done: doneReading, value }) => {
+				if (doneReading) {
+					done = doneReading;
+				}
+				if (value) {
+					const decoder = new TextDecoder();
+					const chunk = decoder.decode(value);
+					const lastMessage = messages[messages.length - 1];
+					const newMessage = {
+						content: lastMessage.content + chunk
+					};
+					messages.update((messages) => [...messages.slice(0, messages.length - 1), newMessage]);
+				}
+			});
+		}
+	});
+}
+
+export function topicGenerate(prompt: string, normal_chat: boolean) {
+	fetch(`${API}/topic`, {
+		method: 'POST',
+		headers: {
+			'Access-Control-Allow-Origin': '*',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			resolution: prompt,
+			normal_chat: normal_chat
+		})
+	}).then((res) => {
+		res.json().then((newTopic) => {
+			let topic = {
+				id: newTopic.id,
+				resolution: newTopic.resolution,
+				side: newTopic.side,
+				normal_chat: newTopic.normal_chat,
+				set_inline: true
+			};
+			topics.update((topics) => [...topics, topic]);
+		});
+	});
+}
 
 export function authorize() {
 	const res = fetch(`${API}/authorize`, {
