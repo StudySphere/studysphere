@@ -14,8 +14,8 @@ export function arguflowLogin() {}
 
 export function arguflowLogout() {}
 
-export async function chat(topic_id: number, message: string) {
-	let res = await fetch(`${BACKEND_API}/message`, {
+export function chat(topic_id: number, message: string) {
+	fetch(`${BACKEND_API}/message`, {
 		method: 'POST',
 		headers: {
 			'Access-Control-Allow-Origin': '*',
@@ -27,30 +27,29 @@ export async function chat(topic_id: number, message: string) {
 			topic_id: topic_id,
 			new_message_content: message
 		})
+	}).then((res) => {
+		const reader = res.body?.getReader();
+		let done = false;
+		while (!done) {
+			reader!.read().then(({ done: doneReading, value }) => {
+				if (doneReading) {
+					done = doneReading;
+				}
+				if (value) {
+					const decoder = new TextDecoder();
+					const chunk = decoder.decode(value);
+					const messagesVal = get(messages);
+					const firstMessage = messagesVal[0];
+					const newMessage = {
+						id: messagesVal.length,
+						host: false,
+						content: firstMessage.content + chunk
+					};
+					messages.update((messages) => [newMessage, ...messages]);
+				}
+			});
+		}
 	});
-
-	const reader = res.body?.getReader();
-	let done = false;
-	while (!done) {
-		let doneReading,
-			value = await reader!.read();
-
-		if (doneReading) {
-			done = doneReading;
-		}
-		if (value) {
-			const decoder = new TextDecoder();
-			const chunk = decoder.decode(value.value);
-			const messagesVal = get(messages);
-			const firstMessage = messagesVal[0];
-			const newMessage = {
-				id: messagesVal.length,
-				host: false,
-				content: firstMessage.content + chunk
-			};
-			messages.update((messages) => [newMessage, ...messages]);
-		}
-	}
 }
 
 export async function topicGenerate(prompt: string, normal_chat: boolean) {
