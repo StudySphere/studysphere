@@ -35,7 +35,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 CORS(
     app,
     allow_headers=["Content-Type", "Authorization"],
-    origins=["http://localhost:5173"],
+    origins=["*"],
     supports_credentials=True,
 )
 
