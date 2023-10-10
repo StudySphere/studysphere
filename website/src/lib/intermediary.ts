@@ -1,16 +1,31 @@
-import { redirect } from '@sveltejs/kit';
-
 const API = 'https://studysphere-parser.arguflow.ai';
 
-export function postArguAuth() {
-	// const res = makeRequest(`${API}/authorize`, 'GET', {});
+export function postGAuth() {
 	const res = fetch(`${API}/authorize`, {
 		method: 'GET',
+		headers: {
+			'Access-Control-Allow-Origin': '*'
+		},
+		redirect: 'follow'
+	})
+		.then((res) => res.text())
+		.then((res) => {
+			window.location.href = res;
+		});
+	return res;
+}
+
+export function postArguReg(email: string, password: string) {
+	const res = fetch(`${API}/arguflow_register`, {
+		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 			'Access-Control-Allow-Origin': '*'
 		},
-		redirect: 'follow'
+		body: JSON.stringify({
+			email: email,
+			password: password
+		})
 	})
 		.then((res) => res.text())
 		.then((res) => {

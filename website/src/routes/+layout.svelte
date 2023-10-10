@@ -15,15 +15,20 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<img class="object-contain h-16" src={image} alt="" />
+				<a href="/"><img class="object-contain h-16" src={image} alt="" /></a>
 				<h2 class="h2">
 					<span
 						class="bg-gradient-to-br from-red-500 to-yellow-500 bg-clip-text text-transparent box-decoration-clone"
-						>Study Sphere</span
 					>
+						<a href="/">Study Sphere</a>
+					</span>
 				</h2>
 			</svelte:fragment>
-			<svelte:fragment slot="trail" />
+			<svelte:fragment slot="trail">
+				<button type="button" class="btn variant-filled">
+					<a href="/auth">Log in</a>
+				</button>
+			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
 	<!-- Page Route Content -->
