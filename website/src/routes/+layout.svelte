@@ -6,7 +6,7 @@
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import image from '../static/logo.png';
+	import image from '$lib/assets/logo.png';
 </script>
 
 <!-- App Shell -->
