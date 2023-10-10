@@ -165,7 +165,11 @@ def oauth2callback():
     resp = flask.make_response(
         flask.redirect("https://studysphere-parser.arguflow.ai/file_upload")
     )
-    resp.set_cookie("google_credentials", json.dumps(credentials_to_dict(credentials)))
+    resp.set_cookie(
+        "google_credentials",
+        json.dumps(credentials_to_dict(credentials)),
+        domain="localhost",
+    )
     return resp
 
 
