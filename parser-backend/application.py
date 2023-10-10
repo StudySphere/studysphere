@@ -8,7 +8,7 @@ import io
 import spacy
 from tika import parser as p
 import json
-
+from flask_cors import CORS
 
 # Load the installed model "en_core_web_sm"
 nlp = spacy.load("en_core_web_sm")
@@ -34,6 +34,13 @@ app = flask.Flask(__name__)
 # If you use this code in your application, replace this with a truly secret
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+CORS(
+    app,
+    send_wildcard=True,
+    allow_headers=["Content-Type", "Authorization"],
+    origins=["*"],
+    supports_credentials=True,
+)
 
 
 def upload_data(drive, filesIds):
