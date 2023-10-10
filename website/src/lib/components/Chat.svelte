@@ -1,27 +1,27 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getText, topicGenerate } from '$lib/intermediary';
+	import { chat, topicGenerate } from '$lib/intermediary';
 	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
 	import { get } from 'svelte/store';
-	import { topics, messageFeed } from '../../stores';
+	import { topics, messages } from '../../stores';
 	import type { Topic } from '$lib/types';
 
 	let currentMessage = '';
-
-	let elemChat: HTMLElement;
-	function scrollChatBottom(behavior?: ScrollBehavior): void {
-		elemChat.scrollTo({ top: elemChat.scrollHeight, behavior });
-	}
+	let currentTopic: Topic = { id: 0, resolution: 'Generate new topic' };
 
 	function addMessage(): void {
-		topicGenerate(currentMessage, true);
+		if (currentTopic.id === 0) {
+			topicGenerate(currentMessage, true);
+		} else {
+			chat(currentTopic.id, currentMessage);
+		}
 		const newMessage = {
-			id: get(messageFeed).length,
+			id: get(messages).length,
 			host: true,
-			message: currentMessage
+			content: currentMessage
 		};
 		// Update the message feed
-		messageFeed.update((messages) => [...messages, newMessage]);
+		messages.update((messages) => [...messages, newMessage]);
 		// Clear prompt
 		currentMessage = '';
 		// Smooth scroll to bottom
@@ -39,12 +39,13 @@
 	}
 
 	// When DOM mounted, scroll to bottom
+	let elemChat: HTMLElement;
+	function scrollChatBottom(behavior?: ScrollBehavior): void {
+		elemChat.scrollTo({ top: elemChat.scrollHeight, behavior });
+	}
 	onMount(() => {
 		scrollChatBottom();
 	});
-
-	// Navigation List
-	let currentTopic: Topic = get(topics)[0];
 </script>
 
 <section class="card">
@@ -53,7 +54,7 @@
 		<div class="hidden lg:grid grid-rows-[auto_1fr_auto] border-r border-surface-500/30">
 			<!-- List -->
 			<div class="p-4 space-y-4 overflow-y-auto">
-				<small class="opacity-50">Subjects</small>
+				<small class="opacity-50">Topics</small>
 				<ListBox active="variant-filled-primary">
 					{#each $topics as topic}
 						<ListBoxItem bind:group={currentTopic} name="subjects" value={topic}>
@@ -67,14 +68,14 @@
 		<div class="grid grid-row-[1fr_auto]">
 			<!-- Conversation -->
 			<section bind:this={elemChat} class="p-4 overflow-y-auto space-y-4">
-				{#each $messageFeed as bubble}
-					{#if bubble.host === true}
+				{#each $messages as messages}
+					{#if messages.host === true}
 						<div class="grid grid-cols-[auto_1fr] gap-2">
 							<div class="card p-4 variant-soft rounded-tl-none space-y-2">
 								<header class="flex justify-between items-center">
 									<p class="font-bold">Me</p>
 								</header>
-								<p>{bubble.message}</p>
+								<p>{messages.content}</p>
 							</div>
 						</div>
 					{:else}
@@ -83,7 +84,7 @@
 								<header class="flex justify-between items-center">
 									<p class="font-bold">Sia</p>
 								</header>
-								<p>{bubble.message}</p>
+								<p>{messages.content}</p>
 							</div>
 						</div>
 					{/if}

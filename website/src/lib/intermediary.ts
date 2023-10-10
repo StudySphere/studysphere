@@ -1,3 +1,4 @@
+import { get } from 'svelte/store';
 import { messages, topics } from '../stores';
 const PARSER_API = 'https://studysphere-parser.arguflow.ai/api';
 const BACKEND_API = 'https://studysphere-backend.arguflow.ai/api';
@@ -13,8 +14,8 @@ export function arguflowLogin() {}
 
 export function arguflowLogout() {}
 
-export function chat(topic_id: string, message: string) {
-	fetch(`${BACKEND_API}/messages`, {
+export function chat(topic_id: number, message: string) {
+	fetch(`${BACKEND_API}/message`, {
 		method: 'POST',
 		headers: {
 			'Access-Control-Allow-Origin': '*',
@@ -37,11 +38,14 @@ export function chat(topic_id: string, message: string) {
 				if (value) {
 					const decoder = new TextDecoder();
 					const chunk = decoder.decode(value);
-					const lastMessage = messages[messages.length - 1];
+					const messagesVal = get(messages);
+					const firstMessage = messagesVal[0];
 					const newMessage = {
-						content: lastMessage.content + chunk
+						id: messagesVal.length,
+						host: false,
+						content: firstMessage.content + chunk
 					};
-					messages.update((messages) => [...messages.slice(0, messages.length - 1), newMessage]);
+					messages.update((messages) => [newMessage, ...messages]);
 				}
 			});
 		}
@@ -63,7 +67,7 @@ export function topicGenerate(prompt: string, normal_chat: boolean) {
 		})
 	}).then((res) => {
 		res.json().then((newTopic) => {
-			let topic = {
+			const topic = {
 				id: newTopic.id,
 				resolution: newTopic.resolution,
 				side: newTopic.side,

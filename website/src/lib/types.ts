@@ -10,7 +10,7 @@ export class User {
 export interface Message {
 	id: number;
 	host: boolean;
-	message: string;
+	content: string;
 }
 
 export interface Topic {
