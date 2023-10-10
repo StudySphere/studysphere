@@ -161,7 +161,7 @@ def oauth2callback():
     credentials = flow.credentials
     flask.session.permanent = True
     flask.session["credentials"] = credentials_to_dict(credentials)
-    resp = flask.make_response("Success", 200)
+    resp = flask.make_response(flask.redirect("https://studysphere.ai/file_upload"))
     resp.set_cookie("google_credentials", json.dumps(credentials_to_dict(credentials)))
     return resp
 
