@@ -18,9 +18,9 @@
 				</h2>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<button type="button" class="btn variant-filled">
-					<a href="/auth">Log in</a>
-				</button>
+				<a href="/auth">
+					<button type="button" class="btn variant-filled"> Log in </button>
+				</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>

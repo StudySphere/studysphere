@@ -17,4 +17,3 @@
 </button>
 
 <button on:click={postGAuth} type="button" class="btn variant-filled">Connect to Google</button>
-<GooglePicker />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { faker } from '@faker-js/faker';
-	import {onMount} from 'svelte';
+	import { onMount } from 'svelte';
 
 	const lorem = faker.lorem.paragraph();
 	let currentMessage = '';
@@ -8,48 +8,28 @@
 	interface MessageFeed {
 		id: number;
 		host: boolean;
-		avatar: number;
-		name: string;
-		timestamp: string;
 		message: string;
-		color: string;
 	}
 	let messageFeed: MessageFeed[] = [
 		{
 			id: 0,
 			host: true,
-			avatar: 48,
-			name: 'Jane',
-			timestamp: 'Yesterday @ 2:30pm',
-			message: lorem,
-			color: 'variant-soft-primary'
+			message: lorem
 		},
 		{
 			id: 1,
 			host: false,
-			avatar: 14,
-			name: 'Michael',
-			timestamp: 'Yesterday @ 2:45pm',
-			message: lorem,
-			color: 'variant-soft-primary'
+			message: lorem
 		},
 		{
 			id: 2,
 			host: true,
-			avatar: 48,
-			name: 'Jane',
-			timestamp: 'Yesterday @ 2:50pm',
-			message: lorem,
-			color: 'variant-soft-primary'
+			message: lorem
 		},
 		{
 			id: 3,
 			host: false,
-			avatar: 14,
-			name: 'Michael',
-			timestamp: 'Yesterday @ 2:52pm',
-			message: lorem,
-			color: 'variant-soft-primary'
+			message: lorem
 		}
 	];
 
@@ -66,11 +46,7 @@
 		const newMessage = {
 			id: messageFeed.length,
 			host: true,
-			avatar: 48,
-			name: 'Jane',
-			timestamp: `Today @ ${getCurrentTimestamp()}`,
-			message: currentMessage,
-			color: 'variant-soft-primary'
+			message: currentMessage
 		};
 		// Update the message feed
 		messageFeed = [...messageFeed, newMessage];
@@ -105,16 +81,16 @@
 					<div class="grid grid-cols-[auto_1fr] gap-2">
 						<div class="card p-4 variant-soft rounded-tl-none space-y-2">
 							<header class="flex justify-between items-center">
-								<p class="font-bold">Seera</p>
+								<p class="font-bold">Me</p>
 							</header>
 							<p>{bubble.message}</p>
 						</div>
 					</div>
 				{:else}
 					<div class="grid grid-cols-[1fr_auto] gap-2">
-						<div class="card p-4 rounded-tr-none space-y-2 {bubble.color}">
+						<div class="card p-4 rounded-tr-none space-y-2 variant-soft-primary">
 							<header class="flex justify-between items-center">
-								<p class="font-bold">Me</p>
+								<p class="font-bold">Sia</p>
 							</header>
 							<p>{bubble.message}</p>
 						</div>
@@ -127,6 +103,7 @@
 			<div
 				class="input-group input-group-divider grid-cols-[auto_1fr_auto] rounded-container-token"
 			>
+				<button class="input-group-shim">+</button>
 				<textarea
 					bind:value={currentMessage}
 					class="bg-transparent border-0 ring-0"
