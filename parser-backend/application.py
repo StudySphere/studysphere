@@ -138,17 +138,17 @@ def authorize():
     flask.session["state"] = state
     resp = flask.make_response(authorization_url, 200)
     resp.set_cookie("state", json.dumps(state))
-    return flask.make_response(authorization_url, 200)
+    return resp
 
 
 @app.route("/oauth2callback")
 def oauth2callback():
     # Specify the state when creating the flow in the callback so that it can
     # verified in the authorization server response.
-    state = flask.session["state"]
+    # state = flask.session["state"]
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE, scopes=SCOPES, state=state
+        CLIENT_SECRETS_FILE, scopes=SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
 
