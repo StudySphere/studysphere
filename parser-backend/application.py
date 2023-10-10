@@ -34,7 +34,6 @@ app = flask.Flask(__name__)
 # If you use this code in your application, replace this with a truly secret
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-app.SESSION_COOKIE_HTTPONLY = False
 
 
 def upload_data(drive, filesIds):
@@ -65,7 +64,7 @@ def upload_data(drive, filesIds):
                 requests.post(
                     "https://studysphere-api.arguflow.ai/api/v1/card",
                     json=body,
-                    cookies=flask.request.cookies.get("arguflow_credentials"),
+                    cookies=flask.session["vault"],
                 )
         else:
             request = drive.files().get_media(fileId=file_id)
@@ -88,15 +87,15 @@ def upload_data(drive, filesIds):
                 requests.post(
                     "https://studysphere-api.arguflow.ai/api/v1/card",
                     json=body,
-                    cookies=flask.request.cookies.get("arguflow_credentials"),
+                    cookies=flask.session["vault"],
                 )
 
 
 @app.route("/upload_gdrive", methods=["POST"])
 def upload_gdrive():
     if "google_credentials" not in flask.session:
-        return flask.make_response("User is not google authed", 401)
-    if "arguflow_credentials" not in flask.session:
+        return flask.redirect(flask.url_for("authorize"))
+    if "vault" not in flask.session:
         return flask.make_response("User is not arguflow authed", 401)
 
     # Load credentials from the session.
@@ -110,7 +109,7 @@ def upload_gdrive():
 
     fileIds = flask.request.json()["filesIds"]
     Thread(target=upload_data, args=(drive, fileIds)).start()
-
+    flask.session["google_credentials"] = credentials_to_dict(credentials)
     return flask.make_response("Success", 200)
 
 
@@ -160,6 +159,7 @@ def oauth2callback():
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     credentials = flow.credentials
+    flask.session.permanent = True
     flask.session["credentials"] = credentials_to_dict(credentials)
     resp = flask.make_response("Success", 200)
     resp.set_cookie("google_credentials", json.dumps(credentials_to_dict(credentials)))
@@ -234,8 +234,9 @@ def register():
                 json={"email": body["email"], "password": body["password"]},
             )
             if req.ok:
+                flask.session.permanent = True
                 resp = flask.make_response("Success", 200)
-                resp.set_cookie("arguflow_credentials", req.cookies["vault"])
+                flask.session["vault"] = req.cookies["vault"]
                 return resp
         else:
             return flask.make_response("Failed", 500)
@@ -252,9 +253,54 @@ def login():
     )
     print(req.text)
     if req.ok:
+        flask.session.permanent = True
         resp = flask.make_response("Success", 200)
-        resp.set_cookie("arguflow_credentials", req.cookies["vault"])
+        flask.session["vault"] = req.cookies["vault"]
         return resp
+
+
+@app.route("/arguflow_logout", methods=["POST"])
+def logout():
+    del flask.session["vault"]
+    resp = flask.make_response("Success", 200)
+    return resp
+
+
+@app.route("/get_text", methods=["POST"])
+def get_text():
+    if "google_credentials" not in flask.session:
+        return flask.redirect(flask.url_for("authorize"))
+
+    # Load credentials from the session.
+    credentials = google.oauth2.credentials.Credentials(
+        **flask.session["google_credentials"]
+    )
+
+    drive = googleapiclient.discovery.build(
+        API_SERVICE_NAME, API_VERSION, credentials=credentials
+    )
+    response = []
+    fileIds = flask.request.json()["filesIds"]
+    for file_id in fileIds:
+        file = drive.files().get(fileId=file_id).execute()
+        if (
+            file["mimeType"] == "application/vnd.google-apps.document"
+            or file["mimeType"] == "application/vnd.google-apps.presentation"
+        ):
+            request = drive.files().export_media(fileId=file_id, mimeType="text/plain")
+            file = io.BytesIO(request.execute())
+            file.seek(0)
+            docfile = file.read().decode("utf-8")
+            response.append({"file_name": file_id, "file_text": docfile})
+        else:
+            request = drive.files().get_media(fileId=file_id)
+            file = io.BytesIO(request.execute())
+            binaryFile = p.from_buffer(file)
+            docfile = binaryFile["content"].strip()
+            response.append({"file_name": file_id, "file_text": docfile})
+
+    flask.session["google_credentials"] = credentials_to_dict(credentials)
+    return flask.jsonify(response)
 
 
 if __name__ == "__main__":
