@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { Message, Subject } from '$lib/types';
+import type { Message, Topic } from '$lib/types';
 import { faker } from '@faker-js/faker';
 
 const lorem = faker.lorem.paragraph();
@@ -9,7 +9,7 @@ const lorem = faker.lorem.paragraph();
 // storedUser.subscribe((value: string) => (localStorage.user = value));
 export const user = writable('');
 export const messages = writable([]);
-export const topics = writable([]);
+export const topics = writable<Topic[]>([]);
 export const messageFeed = writable<Message[]>([
 	{
 		id: 0,
@@ -33,8 +33,8 @@ export const messageFeed = writable<Message[]>([
 	}
 ]);
 
-export const subjects = writable<Subject[]>([
-	{ id: 0, name: 'Math' },
-	{ id: 1, name: 'Science' },
-	{ id: 2, name: 'Gender studies' }
-]);
+// export const subjects = writable<Subject[]>([
+// 	{ id: 0, name: 'Math' },
+// 	{ id: 1, name: 'Science' },
+// 	{ id: 2, name: 'Gender studies' }
+// ]);

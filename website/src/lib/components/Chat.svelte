@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getText } from '$lib/intermediary';
+	import { getText, topicGenerate } from '$lib/intermediary';
 	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
 	import { get } from 'svelte/store';
-	import { subjects, messageFeed } from '../../stores';
-	import type { Subject } from '$lib/types';
+	import { topics, messageFeed } from '../../stores';
+	import type { Topic } from '$lib/types';
 
 	let currentMessage = '';
 
@@ -14,7 +14,7 @@
 	}
 
 	function addMessage(): void {
-		getText(currentMessage);
+		topicGenerate(currentMessage, true);
 		const newMessage = {
 			id: get(messageFeed).length,
 			host: true,
@@ -44,7 +44,7 @@
 	});
 
 	// Navigation List
-	let currentSubject: Subject = get(subjects)[0];
+	let currentTopic: Topic = get(topics)[0];
 </script>
 
 <section class="card">
@@ -55,9 +55,9 @@
 			<div class="p-4 space-y-4 overflow-y-auto">
 				<small class="opacity-50">Subjects</small>
 				<ListBox active="variant-filled-primary">
-					{#each $subjects as subject}
-						<ListBoxItem bind:group={currentSubject} name="subjects" value={subject}>
-							{subject.name}
+					{#each $topics as topic}
+						<ListBoxItem bind:group={currentTopic} name="subjects" value={topic}>
+							{topic.resolution}
 						</ListBoxItem>
 					{/each}
 				</ListBox>

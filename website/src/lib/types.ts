@@ -13,7 +13,7 @@ export interface Message {
 	message: string;
 }
 
-export interface Subject {
+export interface Topic {
 	id: number;
-	name: string;
+	resolution: string;
 }
