@@ -18,8 +18,10 @@ export function chat(topic_id: string, message: string) {
 		method: 'POST',
 		headers: {
 			'Access-Control-Allow-Origin': '*',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: 'af-B2Sr9GZBwmq8lSLQtK5dvEnmXn2KnG1J'
 		},
+		credentials: 'include',
 		body: JSON.stringify({
 			topic_id: topic_id,
 			new_message_content: message
@@ -51,8 +53,10 @@ export function topicGenerate(prompt: string, normal_chat: boolean) {
 		method: 'POST',
 		headers: {
 			'Access-Control-Allow-Origin': '*',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: 'af-B2Sr9GZBwmq8lSLQtK5dvEnmXn2KnG1J'
 		},
+		credentials: 'include',
 		body: JSON.stringify({
 			resolution: prompt,
 			normal_chat: normal_chat
