@@ -28,8 +28,6 @@ API_SERVICE_NAME = "drive"
 API_VERSION = "v3"
 
 app = flask.Flask(__name__)
-app.config["SESSION_PERMANENT"] = True
-
 # Note: A secret key is included in the sample so that it works.
 # If you use this code in your application, replace this with a truly secret
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
@@ -125,7 +123,7 @@ def authorize():
     # for the OAuth 2.0 client, which you configured in the API Console. If this
     # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
     # error.
-    flow.redirect_uri = "https://studysphere-parser.arguflow.ai/oauth2callback"
+    flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
 
     authorization_url, state = flow.authorization_url(
         # Enable offline access so that you can refresh an access token without
