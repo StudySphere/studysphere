@@ -32,12 +32,7 @@ app = flask.Flask(__name__)
 # If you use this code in your application, replace this with a truly secret
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-CORS(
-    app,
-    allow_headers=["Content-Type", "Authorization"],
-    origins=["*"],
-    supports_credentials=True,
-)
+CORS(app)
 
 
 def upload_data(drive, filesIds):
