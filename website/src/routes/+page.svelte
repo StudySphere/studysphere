@@ -1,5 +1,1 @@
-<script lang="ts">
-	import Chat from '../components/Chat.svelte';
-</script>
-
-<Chat />
+<h1 class="h1">Welcome to Study Sphere!</h1>
