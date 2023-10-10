@@ -14,8 +14,8 @@ export function arguflowLogin() {}
 
 export function arguflowLogout() {}
 
-export function chat(topic_id: number, message: string) {
-	fetch(`${BACKEND_API}/message`, {
+export async function chat(topic_id: number, message: string) {
+	let res = await fetch(`${BACKEND_API}/message`, {
 		method: 'POST',
 		headers: {
 			'Access-Control-Allow-Origin': '*',
@@ -27,33 +27,34 @@ export function chat(topic_id: number, message: string) {
 			topic_id: topic_id,
 			new_message_content: message
 		})
-	}).then((res) => {
-		const reader = res.body?.getReader();
-		let done = false;
-		while (!done) {
-			reader!.read().then(({ done: doneReading, value }) => {
-				if (doneReading) {
-					done = doneReading;
-				}
-				if (value) {
-					const decoder = new TextDecoder();
-					const chunk = decoder.decode(value);
-					const messagesVal = get(messages);
-					const firstMessage = messagesVal[0];
-					const newMessage = {
-						id: messagesVal.length,
-						host: false,
-						content: firstMessage.content + chunk
-					};
-					messages.update((messages) => [newMessage, ...messages]);
-				}
-			});
-		}
 	});
+
+	const reader = res.body?.getReader();
+	let done = false;
+	while (!done) {
+		let doneReading,
+			value = await reader!.read();
+
+		if (doneReading) {
+			done = doneReading;
+		}
+		if (value) {
+			const decoder = new TextDecoder();
+			const chunk = decoder.decode(value.value);
+			const messagesVal = get(messages);
+			const firstMessage = messagesVal[0];
+			const newMessage = {
+				id: messagesVal.length,
+				host: false,
+				content: firstMessage.content + chunk
+			};
+			messages.update((messages) => [newMessage, ...messages]);
+		}
+	}
 }
 
-export function topicGenerate(prompt: string, normal_chat: boolean) {
-	fetch(`${BACKEND_API}/topic`, {
+export async function topicGenerate(prompt: string, normal_chat: boolean) {
+	const res = await fetch(`${BACKEND_API}/topic`, {
 		method: 'POST',
 		headers: {
 			'Access-Control-Allow-Origin': '*',
@@ -65,18 +66,18 @@ export function topicGenerate(prompt: string, normal_chat: boolean) {
 			resolution: prompt,
 			normal_chat: normal_chat
 		})
-	}).then((res) => {
-		res.json().then((newTopic) => {
-			const topic = {
-				id: newTopic.id,
-				resolution: newTopic.resolution,
-				side: newTopic.side,
-				normal_chat: newTopic.normal_chat,
-				set_inline: true
-			};
-			topics.update((topics) => [...topics, topic]);
-		});
 	});
+
+	const newTopic = await res.json();
+
+	const topic = {
+		id: newTopic.id,
+		resolution: newTopic.resolution,
+		side: newTopic.side,
+		normal_chat: newTopic.normal_chat,
+		set_inline: true
+	};
+	topics.update((topics) => [...topics, topic]);
 }
 
 export function authorize() {
