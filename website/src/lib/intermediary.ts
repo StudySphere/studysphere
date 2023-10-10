@@ -45,7 +45,8 @@ export function chat(topic_id: number, message: string) {
 						host: false,
 						content: firstMessage.content + chunk
 					};
-					messages.update((messages) => [newMessage, ...messages]);
+					console.log(messages);
+					messages.update((messages) => [newMessage, ...messages.slice(0, messages.length - 1)]);
 				}
 			});
 		}
