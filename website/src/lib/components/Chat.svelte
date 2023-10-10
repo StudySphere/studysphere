@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { faker } from '@faker-js/faker';
 	import { onMount } from 'svelte';
+	import { postQuery } from '$lib/intermediary';
 
 	const lorem = faker.lorem.paragraph();
 	let currentMessage = '';
@@ -43,6 +44,7 @@
 	}
 
 	function addMessage(): void {
+		postQuery(currentMessage);
 		const newMessage = {
 			id: messageFeed.length,
 			host: true,

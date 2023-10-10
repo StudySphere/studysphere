@@ -1,6 +1,18 @@
 const API = 'https://studysphere-parser.arguflow.ai';
 
-export function postGAuth() {
+export function uploadData() {}
+
+export function uploadGDrive() {}
+
+export function revoke() {}
+
+export function clear() {}
+
+export function arguflowLogin() {}
+
+export function arguflowLogout() {}
+
+export function authorize() {
 	const res = fetch(`${API}/authorize`, {
 		method: 'GET',
 		headers: {
@@ -15,7 +27,7 @@ export function postGAuth() {
 	return res;
 }
 
-export function postArguReg(email: string, password: string) {
+export function arguflowRegister(email: string, password: string) {
 	const res = fetch(`${API}/arguflow_register`, {
 		method: 'POST',
 		headers: {
@@ -33,4 +45,8 @@ export function postArguReg(email: string, password: string) {
 		});
 	console.log(res);
 	return res;
+}
+
+export function getText(prompt: string) {
+	console.log(prompt);
 }

@@ -1,79 +1,179 @@
-<script>
-	let tokenClient;
-	let accessToken = null;
-	let pickerInited = false;
-	let gisInited = false;
+<script lang="ts">
+	import { google } from 'googleapis';
+	// import picker from 'google-picker';
 
-	// Use the API Loader script to load google.picker
-	function onApiLoad() {
-		gapi.load('picker', onPickerApiLoad);
-	}
+	// const TOKEN =
+	// 	'ya29.a0AfB_byAcBOJQ4naIpu7SYZhLd-V3haExNhXJMLTY3JAJoBrx-TQEbPYs0ShpfywGe1_c1-emb91o544D-tCL4lb6qdeQlN16GCQqj1GKA9x4nEVTfyg7g9pULHfYMgauFayXIi-eMVLwLkE0iITwsJdzvUwsmtZKIgaCgYKAQsSARESFQGOcNnC_AADOgHv2cmExc7Qi9V8fA0169';
+	// const CLIENT_ID = '735411257172-jk777d58s1err3cfv0b5ha8he5rd7grs.apps.googleusercontent.com';
+	// const CLIENT_SECRET = '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';
+	// const SCOPES = ['https://www.googleapis.com/auth/drive.readonly/'];
+	// const API_KEY = 'AIzaSyCB_Ce9iE8BPTA5JYKl6dIDCkJZOBxgjyg';
 
-	function onPickerApiLoad() {
-		pickerInited = true;
-	}
+	// var pick = picker({
+	// 	clientId: CLIENT_ID,
+	// 	apiKey: API_KEY
+	// });
 
-	function gisLoaded() {
-		// TODO(developer): Replace with your client ID and required scopes.
-		tokenClient = google.accounts.oauth2.initTokenClient({
-			client_id: 'CLIENT_ID',
-			scope: 'SCOPES',
-			callback: '' // defined later
-		});
-		gisInited = true;
-	}
+	// pick({ views: ['DocsView()'] }, function (err, files) {
+	// 	if (err) throw err;
+	// 	// files
+	// });
+</script>
 
-	// Create and render a Google Picker object for selecting from Drive.
-	function createPicker() {
-		const showPicker = () => {
-			// TODO(developer): Replace with your API key
+<!-- <svelte:head>
+	<script async defer src="https://apis.google.com/js/api.js" on:load={onApiLoad}></script>
+	<script async defer src="https://accounts.google.com/gsi/client" on:load={gisLoaded}></script>
+</svelte:head> -->
+
+<iframe title="fuck">
+	<p>Picker API API Quickstart</p>
+
+	<!--Add buttons to initiate auth sequence and sign out-->
+	<button id="authorize_button" onclick="handleAuthClick()">Authorize</button>
+	<button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
+
+	<pre id="content" style="white-space: pre-wrap;" />
+
+	<script type="text/javascript">
+		/* exported gapiLoaded */
+		/* exported gisLoaded */
+		/* exported handleAuthClick */
+		/* exported handleSignoutClick */
+
+		// Authorization scopes required by the API; multiple scopes can be
+		// included, separated by spaces.
+		const SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+
+		// TODO(developer): Set to client ID and API key from the Developer Console
+		const CLIENT_ID = '735411257172-jk777d58s1err3cfv0b5ha8he5rd7grs.apps.googleusercontent.com';
+		const API_KEY = 'AIzaSyCB_Ce9iE8BPTA5JYKl6dIDCkJZOBxgjyg';
+
+		// TODO(developer): Replace with your own project number from console.developers.google.com.
+		const APP_ID = 'bruh';
+
+		let tokenClient;
+		let accessToken = null;
+		let pickerInited = false;
+		let gisInited = false;
+
+		document.getElementById('authorize_button').style.visibility = 'hidden';
+		document.getElementById('signout_button').style.visibility = 'hidden';
+
+		/**
+		 * Callback after api.js is loaded.
+		 */
+		function gapiLoaded() {
+			gapi.load('client:picker', initializePicker);
+		}
+
+		/**
+		 * Callback after the API client is loaded. Loads the
+		 * discovery doc to initialize the API.
+		 */
+		async function initializePicker() {
+			await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest');
+			pickerInited = true;
+			maybeEnableButtons();
+		}
+
+		/**
+		 * Callback after Google Identity Services are loaded.
+		 */
+		function gisLoaded() {
+			tokenClient = google.accounts.oauth2.initTokenClient({
+				client_id: CLIENT_ID,
+				scope: SCOPES,
+				callback: '' // defined later
+			});
+			gisInited = true;
+			maybeEnableButtons();
+		}
+
+		/**
+		 * Enables user interaction after all libraries are loaded.
+		 */
+		function maybeEnableButtons() {
+			if (pickerInited && gisInited) {
+				document.getElementById('authorize_button').style.visibility = 'visible';
+			}
+		}
+
+		/**
+		 *  Sign in the user upon button click.
+		 */
+		function handleAuthClick() {
+			tokenClient.callback = async (response) => {
+				if (response.error !== undefined) {
+					throw response;
+				}
+				accessToken = response.access_token;
+				document.getElementById('signout_button').style.visibility = 'visible';
+				document.getElementById('authorize_button').innerText = 'Refresh';
+				await createPicker();
+			};
+
+			if (accessToken === null) {
+				// Prompt the user to select a Google Account and ask for consent to share their data
+				// when establishing a new session.
+				tokenClient.requestAccessToken({ prompt: 'consent' });
+			} else {
+				// Skip display of account chooser and consent dialog for an existing session.
+				tokenClient.requestAccessToken({ prompt: '' });
+			}
+		}
+
+		/**
+		 *  Sign out the user upon button click.
+		 */
+		function handleSignoutClick() {
+			if (accessToken) {
+				accessToken = null;
+				google.accounts.oauth2.revoke(accessToken);
+				document.getElementById('content').innerText = '';
+				document.getElementById('authorize_button').innerText = 'Authorize';
+				document.getElementById('signout_button').style.visibility = 'hidden';
+			}
+		}
+
+		/**
+		 *  Create and render a Picker object for searching images.
+		 */
+		function createPicker() {
+			const view = new google.picker.View(google.picker.ViewId.DOCS);
+			view.setMimeTypes('image/png,image/jpeg,image/jpg');
 			const picker = new google.picker.PickerBuilder()
-				.addView(google.picker.ViewId.DOCS)
+				.enableFeature(google.picker.Feature.NAV_HIDDEN)
+				.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+				.setDeveloperKey(API_KEY)
+				.setAppId(APP_ID)
 				.setOAuthToken(accessToken)
-				.setDeveloperKey('API_KEY')
+				.addView(view)
+				.addView(new google.picker.DocsUploadView())
 				.setCallback(pickerCallback)
 				.build();
 			picker.setVisible(true);
-		};
+		}
 
-		// Request an access token.
-		tokenClient.callback = async (response) => {
-			if (response.error !== undefined) {
-				throw response;
+		/**
+		 * Displays the file details of the user's selection.
+		 * @param {object} data - Containers the user selection from the picker
+		 */
+		async function pickerCallback(data) {
+			if (data.action === google.picker.Action.PICKED) {
+				let text = `Picker response: \n${JSON.stringify(data, null, 2)}\n`;
+				const document = data[google.picker.Response.DOCUMENTS][0];
+				const fileId = document[google.picker.Document.ID];
+				console.log(fileId);
+				const res = await gapi.client.drive.files.get({
+					fileId: fileId,
+					fields: '*'
+				});
+				text += `Drive API response for first document: \n${JSON.stringify(res.result, null, 2)}\n`;
+				window.document.getElementById('content').innerText = text;
 			}
-			accessToken = response.access_token;
-			showPicker();
-		};
-
-		if (accessToken === null) {
-			// Prompt the user to select a Google Account and ask for consent to share their data
-			// when establishing a new session.
-			tokenClient.requestAccessToken({ prompt: 'consent' });
-		} else {
-			// Skip display of account chooser and consent dialog for an existing session.
-			tokenClient.requestAccessToken({ prompt: '' });
 		}
-	}
-
-	// A simple callback implementation.
-	function pickerCallback(data) {
-		let url = 'nothing';
-		if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-			let doc = data[google.picker.Response.DOCUMENTS][0];
-			url = doc[google.picker.Document.URL];
-		}
-		let message = `You picked: ${url}`;
-		document.getElementById('result').innerText = message;
-	}
-</script>
-
-<button on:click={createPicker} type="button" class="btn variant-filled">Pick</button>
-
-<!-- Load the Google API Loader script. -->
-<!-- <script async defer src="https://apis.google.com/js/api.js" onload="onApiLoad()"></script>
-    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script> -->
-
-<svelte:head>
-	<script src="https://apis.google.com/js/api.js" on:load={gisLoaded}></script>
-	<script src="https://accounts.google.com/gsi/client" on:load={gisLoaded}></script>
-</svelte:head>
+		createPicker();
+	</script>
+	<script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+	<script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+</iframe>

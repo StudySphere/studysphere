@@ -39,6 +39,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@floating-ui/dom": "1.5.3"
+		"@floating-ui/dom": "1.5.3",
+		"@googleapis/docs": "^2.0.5",
+		"google-picker": "^0.1.1",
+		"googleapis": "^126.0.1"
 	}
 }
