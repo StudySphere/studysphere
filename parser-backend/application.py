@@ -32,6 +32,7 @@ app = flask.Flask(__name__)
 # If you use this code in your application, replace this with a truly secret
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.config["SESSION_COOKIE_DOMAIN"] = "studysphere-parser.arguflow.ai"
 CORS(app)
 
 
@@ -135,7 +136,8 @@ def authorize():
 
     # Store the state so the callback can verify the auth server response.
     flask.session["state"] = state
-
+    resp = flask.make_response(authorization_url, 200)
+    resp.set_cookie("state", json.dumps(state))
     return flask.make_response(authorization_url, 200)
 
 
