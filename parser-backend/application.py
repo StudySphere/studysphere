@@ -136,7 +136,7 @@ def authorize():
     # Store the state so the callback can verify the auth server response.
     flask.session["state"] = state
 
-    return flask.redirect(authorization_url)
+    return flask.make_response(authorization_url, 200)
 
 
 @app.route("/oauth2callback")
