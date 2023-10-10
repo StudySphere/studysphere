@@ -6,22 +6,14 @@ import {
   BiRegularLogOut,
   BiRegularPlus,
   BiRegularTrash,
+  BiRegularUpload,
   BiRegularX,
 } from "solid-icons/bi";
-import {
-  Accessor,
-  createEffect,
-  createSignal,
-  For,
-  Setter,
-  Show,
-} from "solid-js";
+import { Accessor, createSignal, For, Setter, Show } from "solid-js";
 import type { Topic } from "~/types/topics";
 import { FiSettings } from "solid-icons/fi";
 import { FullScreenModal } from "../Atoms/FullScreenModal";
 import { OnScreenThemeModeController } from "../Atoms/OnScreenThemeModeController";
-import { AiFillGithub } from "solid-icons/ai";
-import { TbMinusVertical } from "solid-icons/tb";
 
 export interface SidebarProps {
   topics: Accessor<Topic[]>;
@@ -43,7 +35,7 @@ export const Sidebar = (props: SidebarProps) => {
   const [editingTopic, setEditingTopic] = createSignal("");
   const [settingsModalOpen, setSettingsModalOpen] = createSignal(false);
   const [starCount, setStarCount] = createSignal(0);
-
+  const [openiFrame, setOpeniFrame] = createSignal(false);
   const submitEditText = async () => {
     const topics = props.topics();
     const topic = topics[editingIndex()];
@@ -103,28 +95,11 @@ export const Sidebar = (props: SidebarProps) => {
     });
   };
 
-  createEffect(() => {
-    try {
-      void fetch(`https://api.github.com/repos/arguflow/arguflow`, {
-        headers: {
-          Accept: "application/vnd.github+json",
-        },
-      }).then((response) => {
-        if (!response.ok) {
-          return;
-        }
-        void response.json().then((data) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          setStarCount(data.stargazers_count);
-        });
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  });
-
   return (
     <div class="absolute z-50 flex h-screen w-screen flex-row dark:text-gray-50 lg:relative lg:w-full">
+      <Show when={openiFrame()}>
+        <iframe src="/filePicker.html" />
+      </Show>
       <div class="flex h-full w-2/3 flex-col bg-neutral-50 dark:bg-neutral-800 lg:w-full">
         <div class="flex w-full flex-col space-y-2 px-2 py-2 ">
           <button
@@ -247,6 +222,13 @@ export const Sidebar = (props: SidebarProps) => {
         <div class="flex w-full flex-col space-y-1 border-t px-2 py-2 dark:border-neutral-400">
           <button
             class="flex w-full items-center space-x-4  rounded-md px-3 py-2 hover:bg-neutral-200   dark:hover:bg-neutral-700"
+            onClick={() => setOpeniFrame(true)}
+          >
+            <BiRegularUpload class="h-6 w-6 fill-current" />
+            <div>Upload Files</div>
+          </button>
+          <button
+            class="flex w-full items-center space-x-4  rounded-md px-3 py-2 hover:bg-neutral-200   dark:hover:bg-neutral-700"
             onClick={logout}
           >
             <BiRegularLogOut class="h-6 w-6 fill-current" />
@@ -259,31 +241,13 @@ export const Sidebar = (props: SidebarProps) => {
             <FiSettings class="h-6 w-6" />
             <div>Settings</div>
           </button>
-          <Show when={showGithubStars !== "off"}>
-            <a
-              href="https://github.com/arguflow/arguflow"
-              class="flex w-full items-center space-x-4 rounded-md px-3 py-2 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-            >
-              <AiFillGithub class="h-6 w-6 fill-current" />
-              <div class="flex">
-                <p>STAR US</p>
-                <TbMinusVertical class="h-6 w-6" />
-                <p>{starCount()}</p>
-              </div>
-            </a>
-          </Show>
           <a
             href="https://github.com/arguflow/arguflow"
             class="flex items-center space-x-1 px-3 py-2"
           >
-            <img src="/logo_512.png" class="h-7 w-7" />
             <div>
-              <div class="mb-[-4px] w-full text-end align-bottom text-xs leading-3 text-turquoise">
-                {dataset}
-              </div>
               <div class="align-top text-lg">
-                <span>Arguflow</span>
-                <span class="text-magenta">Chat</span>\
+                <span>StudySphere</span>
               </div>
             </div>
           </a>
