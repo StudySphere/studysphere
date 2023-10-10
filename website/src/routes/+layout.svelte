@@ -24,5 +24,7 @@
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
-	<slot />
+	<div class="m-10">
+		<slot />
+	</div>
 </AppShell>

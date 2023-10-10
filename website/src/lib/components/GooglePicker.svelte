@@ -1,0 +1,79 @@
+<script>
+	let tokenClient;
+	let accessToken = null;
+	let pickerInited = false;
+	let gisInited = false;
+
+	// Use the API Loader script to load google.picker
+	function onApiLoad() {
+		gapi.load('picker', onPickerApiLoad);
+	}
+
+	function onPickerApiLoad() {
+		pickerInited = true;
+	}
+
+	function gisLoaded() {
+		// TODO(developer): Replace with your client ID and required scopes.
+		tokenClient = google.accounts.oauth2.initTokenClient({
+			client_id: 'CLIENT_ID',
+			scope: 'SCOPES',
+			callback: '' // defined later
+		});
+		gisInited = true;
+	}
+
+	// Create and render a Google Picker object for selecting from Drive.
+	function createPicker() {
+		const showPicker = () => {
+			// TODO(developer): Replace with your API key
+			const picker = new google.picker.PickerBuilder()
+				.addView(google.picker.ViewId.DOCS)
+				.setOAuthToken(accessToken)
+				.setDeveloperKey('API_KEY')
+				.setCallback(pickerCallback)
+				.build();
+			picker.setVisible(true);
+		};
+
+		// Request an access token.
+		tokenClient.callback = async (response) => {
+			if (response.error !== undefined) {
+				throw response;
+			}
+			accessToken = response.access_token;
+			showPicker();
+		};
+
+		if (accessToken === null) {
+			// Prompt the user to select a Google Account and ask for consent to share their data
+			// when establishing a new session.
+			tokenClient.requestAccessToken({ prompt: 'consent' });
+		} else {
+			// Skip display of account chooser and consent dialog for an existing session.
+			tokenClient.requestAccessToken({ prompt: '' });
+		}
+	}
+
+	// A simple callback implementation.
+	function pickerCallback(data) {
+		let url = 'nothing';
+		if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+			let doc = data[google.picker.Response.DOCUMENTS][0];
+			url = doc[google.picker.Document.URL];
+		}
+		let message = `You picked: ${url}`;
+		document.getElementById('result').innerText = message;
+	}
+</script>
+
+<button on:click={createPicker} type="button" class="btn variant-filled">Pick</button>
+
+<!-- Load the Google API Loader script. -->
+<!-- <script async defer src="https://apis.google.com/js/api.js" onload="onApiLoad()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script> -->
+
+<svelte:head>
+	<script src="https://apis.google.com/js/api.js" on:load={gisLoaded}></script>
+	<script src="https://accounts.google.com/gsi/client" on:load={gisLoaded}></script>
+</svelte:head>
