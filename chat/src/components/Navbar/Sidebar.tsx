@@ -23,19 +23,15 @@ export interface SidebarProps {
   setCurrentTopic: (topic: Topic | undefined) => void;
   setSideBarOpen: Setter<boolean>;
   setIsCreatingNormalTopic: Setter<boolean>;
+  setOpeniFrame: Setter<boolean>;
 }
 
 export const Sidebar = (props: SidebarProps) => {
   const apiHost = import.meta.env.VITE_API_HOST as unknown as string;
-  const dataset = import.meta.env.VITE_DATASET as unknown as string;
-  const showGithubStars = import.meta.env
-    .VITE_SHOW_GITHUB_STARS as unknown as string;
 
   const [editingIndex, setEditingIndex] = createSignal(-1);
   const [editingTopic, setEditingTopic] = createSignal("");
   const [settingsModalOpen, setSettingsModalOpen] = createSignal(false);
-  const [starCount, setStarCount] = createSignal(0);
-  const [openiFrame, setOpeniFrame] = createSignal(false);
   const submitEditText = async () => {
     const topics = props.topics();
     const topic = topics[editingIndex()];
@@ -97,9 +93,6 @@ export const Sidebar = (props: SidebarProps) => {
 
   return (
     <div class="absolute z-50 flex h-screen w-screen flex-row dark:text-gray-50 lg:relative lg:w-full">
-      <Show when={openiFrame()}>
-        <iframe src="/filePicker.html" />
-      </Show>
       <div class="flex h-full w-2/3 flex-col bg-neutral-50 dark:bg-neutral-800 lg:w-full">
         <div class="flex w-full flex-col space-y-2 px-2 py-2 ">
           <button
@@ -222,7 +215,7 @@ export const Sidebar = (props: SidebarProps) => {
         <div class="flex w-full flex-col space-y-1 border-t px-2 py-2 dark:border-neutral-400">
           <button
             class="flex w-full items-center space-x-4  rounded-md px-3 py-2 hover:bg-neutral-200   dark:hover:bg-neutral-700"
-            onClick={() => setOpeniFrame(true)}
+            onClick={() => props.setOpeniFrame(true)}
           >
             <BiRegularUpload class="h-6 w-6 fill-current" />
             <div>Upload Files</div>

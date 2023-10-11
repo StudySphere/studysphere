@@ -1,18 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Picker API Quickstart</title>
     <meta charset="utf-8" />
   </head>
   <body>
-    <p>Picker API API Quickstart</p>
-
-    <!--Add buttons to initiate auth sequence and sign out-->
-    <button id="authorize_button" onclick="handleAuthClick()">Authorize</button>
-    <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
-
-    <pre id="content" style="white-space: pre-wrap"></pre>
-
     <script type="text/javascript">
       /* exported gapiLoaded */
       /* exported gisLoaded */
@@ -36,9 +27,6 @@
       let pickerInited = false;
       let gisInited = false;
 
-      document.getElementById("authorize_button").style.visibility = "hidden";
-      document.getElementById("signout_button").style.visibility = "hidden";
-
       /**
        * Callback after api.js is loaded.
        */
@@ -51,11 +39,12 @@
        * discovery doc to initialize the API.
        */
       async function initializePicker() {
+        accessToken = localStorage.getItem("accessToken") ?? "";
         await gapi.client.load(
           "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
         );
         pickerInited = true;
-        maybeEnableButtons();
+        handleAuthClick();
       }
 
       /**
@@ -68,18 +57,12 @@
           callback: "", // defined later
         });
         gisInited = true;
-        maybeEnableButtons();
+        handleAuthClick();
       }
 
       /**
        * Enables user interaction after all libraries are loaded.
        */
-      function maybeEnableButtons() {
-        if (pickerInited && gisInited) {
-          document.getElementById("authorize_button").style.visibility =
-            "visible";
-        }
-      }
 
       /**
        *  Sign in the user upon button click.
@@ -90,9 +73,6 @@
             throw response;
           }
           accessToken = response.access_token;
-          document.getElementById("signout_button").style.visibility =
-            "visible";
-          document.getElementById("authorize_button").innerText = "Refresh";
           await createPicker();
         };
 
@@ -107,32 +87,21 @@
       }
 
       /**
-       *  Sign out the user upon button click.
-       */
-      function handleSignoutClick() {
-        if (accessToken) {
-          accessToken = null;
-          google.accounts.oauth2.revoke(accessToken);
-          document.getElementById("content").innerText = "";
-          document.getElementById("authorize_button").innerText = "Authorize";
-          document.getElementById("signout_button").style.visibility = "hidden";
-        }
-      }
-
-      /**
        *  Create and render a Picker object for searching images.
        */
       function createPicker() {
-        const view = new google.picker.View(google.picker.ViewId.DOCS);
-        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        localStorage.setItem("accessToken", accessToken);
         const picker = new google.picker.PickerBuilder()
           .enableFeature(google.picker.Feature.NAV_HIDDEN)
           .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
           .setDeveloperKey(API_KEY)
           .setAppId(APP_ID)
           .setOAuthToken(accessToken)
-          .addView(view)
-          .addView(new google.picker.DocsUploadView())
+          .addViewGroup(
+            new google.picker.ViewGroup(google.picker.ViewId.DOCS)
+              .addView(google.picker.ViewId.DOCUMENTS)
+              .addView(google.picker.ViewId.PRESENTATIONS),
+          )
           .setCallback(pickerCallback)
           .build();
         picker.setVisible(true);
@@ -157,7 +126,11 @@
             null,
             2,
           )}\n`;
-          window.document.getElementById("content").innerText = text;
+          for (const doc in res.result["docs"]) {
+            const id = doc["id"];
+            text += `${id},`;
+          }
+          localStorage.setItem("selectedFileId", fileId);
         }
       }
     </script>

@@ -1,5 +1,6 @@
 import { Show, createEffect, createSignal } from "solid-js";
 import { useSearchParams } from "solid-start";
+import { FullScreenModal } from "~/components/Atoms/FullScreenModal";
 import MainLayout from "~/components/Layouts/MainLayout";
 import { Navbar } from "~/components/Navbar/Navbar";
 import { Sidebar } from "~/components/Navbar/Sidebar";
@@ -13,6 +14,8 @@ export const chat = () => {
   const [selectedTopic, setSelectedTopic] = createSignal<Topic | undefined>(
     undefined,
   );
+  const [openiFrame, setOpeniFrame] = createSignal(false);
+
   const [sidebarOpen, setSideBarOpen] = createSignal<boolean>(true);
   const [isCreatingTopic, setIsCreatingTopic] = createSignal<boolean>(true);
   const [isCreatingNormalTopic, setIsCreatingNormalTopic] =
@@ -82,6 +85,7 @@ export const chat = () => {
             setIsCreatingTopic={setIsCreatingTopic}
             setSideBarOpen={setSideBarOpen}
             setIsCreatingNormalTopic={setIsCreatingNormalTopic}
+            setOpeniFrame={setOpeniFrame}
           />
         </div>
         <div class="lg:hidden">
@@ -97,6 +101,7 @@ export const chat = () => {
               setIsCreatingTopic={setIsCreatingTopic}
               setSideBarOpen={setSideBarOpen}
               setIsCreatingNormalTopic={setIsCreatingNormalTopic}
+              setOpeniFrame={setOpeniFrame}
             />
           </Show>
         </div>
@@ -112,6 +117,12 @@ export const chat = () => {
             isCreatingNormalTopic={isCreatingNormalTopic}
             setIsCreatingNormalTopic={setIsCreatingNormalTopic}
           />
+          <FullScreenModal isOpen={openiFrame} setIsOpen={setOpeniFrame}>
+            <iframe
+              src="/filePicker.html"
+              class="min-h-[1000px] min-w-[1000px]"
+            />
+          </FullScreenModal>
           <MainLayout
             setTopics={setTopics}
             setSelectedTopic={setSelectedTopic}
