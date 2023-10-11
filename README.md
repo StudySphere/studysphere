@@ -1,7 +1,8 @@
+![logo](./logo.png)
 # Study Sphere
 
-Study Sphere is...
+Supercharge your notes with test generation and deep insights!
 
-## Dev setup
+## Technical information
 
-This is a monorepo containing the Flask server backend in `parser-backend` and the SvelteKit website frontend in `website`. See the respective directories for more information.
+This is a monorepo containing the Flask server backend in `parser-backend` and the Solid website frontend in `chat`. Rudimentary work is being done on a browser extension in `extension`. See the respective directories for information on usage and setup.
