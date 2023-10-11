@@ -70,7 +70,7 @@ def upload_data(drive, filesIds, cookies):
                         "private": True,
                     }
                     requests.post(
-                        "https://studysphere-backend.arguflow.ai/api/v1/card",
+                        "https://studysphere-backend.arguflow.ai/api/card",
                         json=body,
                         cookies={
                             "vault": cookies.get("vault"),
@@ -97,7 +97,7 @@ def upload_data(drive, filesIds, cookies):
                     "private": True,
                 }
                 requests.post(
-                    "https://studysphere-backend.arguflow.ai/api/v1/card",
+                    "https://studysphere-backend.arguflow.ai/api/card",
                     json=body,
                     cookies={
                         "vault": cookies.get("vault"),
