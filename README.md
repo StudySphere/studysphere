@@ -1,4 +1,5 @@
-![logo](./logo.png)
+<img src="./logo.png" alt="logo" width="200"/>
+
 # Study Sphere
 
 Supercharge your notes with test generation and deep insights!
