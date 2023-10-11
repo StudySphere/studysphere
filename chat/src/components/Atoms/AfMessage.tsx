@@ -69,7 +69,7 @@ export const AfMessage = (props: AfMessageProps) => {
             classList={{
               "dark:text-white md:px-6 w-full px-4 py-4 flex items-start": true,
               "bg-pink-50 dark:bg-zinc-700": props.role === "assistant",
-              "bg-neutral-50 dark:bg-zinc-800": props.role === "user",
+              "bg-beige dark:bg-zinc-800": props.role === "user",
             }}
             onMouseEnter={() => setShowEditingIcon(true)}
             onMouseLeave={() => {
@@ -97,10 +97,7 @@ export const AfMessage = (props: AfMessageProps) => {
                 </div>
                 <Show when={!displayMessage().content}>
                   <div class="col-span-2 w-full whitespace-pre-line">
-                    <img
-                      src="/cooking-crab.gif"
-                      class="aspect-square w-[128px]"
-                    />
+                    <img src="/thinking.gif" class="aspect-square w-[128px]" />
                   </div>
                 </Show>
                 <Show when={cardMetadatas()}>

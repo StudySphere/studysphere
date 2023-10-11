@@ -49,24 +49,10 @@ export default function Root() {
     );
   });
 
-  createEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const script: any = document.createElement("script");
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    script.src = "https://perhaps.arguflow.com/js/script.js";
-    script["data-domain"] = plausibleHost;
-    script.defer = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  });
-
   return (
     <Html lang="en">
       <Head>
-        <Title>Arguflow Chat</Title>
+        <Title>Study Sphere Chat</Title>
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
         <Link rel="manifest" href="/manifest.json" />
@@ -75,32 +61,15 @@ export default function Root() {
 
         <Meta
           name="description"
-          content="Demo of Arguflow's LLM-chat infrastructure - Retrieval Augmented Chat"
+          content="Supercharge your notes with test generation and deep insights!"
         />
 
-        <Meta property="og:url" content="https://arguflow.ai/" />
+        {/* <Meta property="og:url" content="https://" /> */}
         <Meta property="og:type" content="website/" />
-        <Meta property="og:title" content="Arguflow Chat" />
+        <Meta property="og:title" content="Study Sphere Chat" />
         <Meta
           property="og:description"
-          content="Demo of Arguflow's LLM-chat infrastructure - Retrieval Augmented Chat"
-        />
-        <Meta
-          property="og:image"
-          content="https://blog.arguflow.ai/arguflow-og.png"
-        />
-
-        <Meta name="twitter:card" content="summary_large_image" />
-        <Meta property="twitter:domain" content="chat.arguflow.ai" />
-        <Meta property="twitter:url" content="https://chat.arguflow.ai" />
-        <Meta name="twitter:title" content="Arguflow Chat" />
-        <Meta
-          name="twitter:description"
-          content="Demo of Arguflow's LLM-chat infrastructure - Retrieval Augmented Chat"
-        />
-        <Meta
-          name="twitter:image"
-          content="https://blog.arguflow.ai/arguflow-og.png"
+          content="Supercharge your notes with test generation and deep insights"
         />
       </Head>
       <Body>

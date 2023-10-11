@@ -102,7 +102,7 @@ export const Sidebar = (props: SidebarProps) => {
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
-            class="flex w-full flex-row items-center rounded-md border border-primary px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
+            class="flex w-full flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
           >
             <div class="flex flex-row items-center space-x-2">
               <span class="text-xl">
@@ -118,7 +118,7 @@ export const Sidebar = (props: SidebarProps) => {
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
-            class="flex w-full flex-row items-center rounded-md border border-primary px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
+            class="flex w-full flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
           >
             <div class="flex flex-row items-center space-x-2">
               <span class="text-xl">
@@ -235,7 +235,7 @@ export const Sidebar = (props: SidebarProps) => {
             <div>Settings</div>
           </button>
           <a
-            href="https://github.com/arguflow/arguflow"
+            href="https://github.com/StudySphere/studysphere"
             class="flex items-center space-x-1 px-3 py-2"
           >
             <div class="flex items-center">

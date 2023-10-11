@@ -6,7 +6,6 @@ import {
   BiLogosTwitter,
   BiLogosYoutube,
 } from "solid-icons/bi";
-import { TbMinusVertical } from "solid-icons/tb";
 import { Show, createEffect, createSignal, onCleanup } from "solid-js";
 import { A, useSearchParams } from "solid-start";
 import ThemeModeController from "~/components/Navbar/ThemeModeController";
@@ -14,15 +13,8 @@ import { detectReferralToken } from "~/types/actix-api";
 
 export default function Home() {
   const apiHost: string = import.meta.env.VITE_API_HOST as unknown as string;
-  const searchURL = import.meta.env.VITE_SEARCH_URL as string;
-  const dataset = import.meta.env.VITE_DATASET as unknown as string;
-  const youtubeEmbedURL = import.meta.env.VITE_YOUTUBE_EMBED_URL as string;
-  const showGithubStars = import.meta.env
-    .VITE_SHOW_GITHUB_STARS as unknown as string;
-
   const [searchParams] = useSearchParams();
   const [isLogin, setIsLogin] = createSignal<boolean>(false);
-  const [starCount, setStarCount] = createSignal(0);
 
   detectReferralToken(searchParams.t);
 
@@ -47,26 +39,6 @@ export default function Home() {
     onCleanup(() => {
       abort_controller.abort();
     });
-  });
-
-  createEffect(() => {
-    try {
-      void fetch(`https://api.github.com/repos/arguflow/arguflow`, {
-        headers: {
-          Accept: "application/vnd.github+json",
-        },
-      }).then((response) => {
-        if (!response.ok) {
-          return;
-        }
-        void response.json().then((data) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          setStarCount(data.stargazers_count);
-        });
-      });
-    } catch (e) {
-      console.error(e);
-    }
   });
 
   return (

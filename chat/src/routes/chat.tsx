@@ -136,7 +136,7 @@ export const chat = () => {
 
   return (
     <Show when={isLogin()}>
-      <div class="relative flex h-screen flex-row bg-neutral-50 dark:bg-zinc-900">
+      <div class="relative flex h-screen flex-row bg-background dark:bg-zinc-900">
         <div class="hidden w-1/4 overflow-x-hidden lg:block">
           <Sidebar
             currentTopic={selectedTopic}

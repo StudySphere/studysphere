@@ -13,6 +13,7 @@ import {
   FiSend,
   FiStopCircle,
 } from "solid-icons/fi";
+import { FaSolidPlus } from "solid-icons/fa";
 import {
   isMessageArray,
   messageRoleFromIndex,
@@ -20,6 +21,7 @@ import {
 } from "~/types/messages";
 import { Topic } from "~/types/topics";
 import { AfMessage } from "../Atoms/AfMessage";
+import { AiFillPlusCircle } from "solid-icons/ai";
 
 export interface LayoutProps {
   setTopics: Setter<Topic[]>;
@@ -309,7 +311,7 @@ const MainLayout = (props: LayoutProps) => {
       >
         <div class="flex w-full flex-col">
           <div class="flex w-full flex-col items-center justify-center">
-            <img src="/cooking-crab.gif" class="aspect-square w-[128px]" />
+            <img src="/thinking.gif" class="aspect-square w-[128px]" />
           </div>
         </div>
       </Show>
@@ -431,9 +433,21 @@ const MainLayout = (props: LayoutProps) => {
             </Show>
             <div class="flex w-full flex-row space-x-2">
               <form class="relative flex h-fit max-h-[calc(100vh-32rem)] w-full flex-col items-center overflow-y-auto rounded-xl bg-neutral-50 py-1 pl-4 pr-6 text-neutral-800 dark:bg-neutral-700 dark:text-white">
+                <button
+                  classList={{
+                    "flex h-10 w-10 items-center justify-center absolute left-[0px] bottom-0":
+                      true,
+                    "text-neutral-400": !newMessageContent(),
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                >
+                  <FaSolidPlus />
+                </button>
                 <textarea
                   id="new-message-content-textarea"
-                  class="w-full resize-none whitespace-pre-wrap bg-transparent py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none dark:bg-neutral-700 dark:text-white dark:scrollbar-track-neutral-700 dark:scrollbar-thumb-neutral-600"
+                  class="ml-10 w-full resize-none whitespace-pre-wrap bg-transparent py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none dark:bg-neutral-700 dark:text-white dark:scrollbar-track-neutral-700 dark:scrollbar-thumb-neutral-600"
                   placeholder="Write a question or prompt for the assistant..."
                   value={newMessageContent()}
                   disabled={streamingCompletion()}

@@ -96,8 +96,7 @@ module.exports = {
           DEFAULT: "#ffe0a7ff",
         },
         background: {
-          // DEFAULT: "f5f3ed",
-          DEFAULT: "000",
+          DEFAULT: "#fffff2",
         },
       },
     },
