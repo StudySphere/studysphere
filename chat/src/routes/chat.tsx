@@ -47,9 +47,25 @@ export const chat = () => {
       }
     });
 
+    function getCookie(cname: string): string {
+      const name = cname + "=";
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const ca = decodedCookie.split(";");
+      for (const c of ca) {
+        let cookie = c;
+        while (cookie.startsWith(" ")) {
+          cookie = cookie.substring(1);
+        }
+        if (cookie.startsWith(name)) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return "";
+    }
+
     window.document.addEventListener("ids_selected", (e) => {
       if (e.detail) {
-        fetch(`${parserHost}/gdrive_upload`, {
+        fetch(`${parserHost}/upload_gdrive`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -58,6 +74,7 @@ export const chat = () => {
           body: JSON.stringify({
             filesIds: e.detail.split(",").slice(0, -1),
             google_credentials: localStorage.getItem("accessToken"),
+            vault: getCookie("vault"),
           }),
         }).then((response) => {
           if (response.ok) {

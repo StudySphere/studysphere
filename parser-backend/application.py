@@ -68,7 +68,9 @@ def upload_data(drive, filesIds, cookies):
                 requests.post(
                     "https://studysphere-api.arguflow.ai/api/v1/card",
                     json=body,
-                    cookies=cookies.get("vault"),
+                    cookies={
+                        "vault": cookies.get("vault"),
+                    },
                 )
         else:
             request = drive.files().get_media(fileId=file_id)
@@ -91,7 +93,9 @@ def upload_data(drive, filesIds, cookies):
                 requests.post(
                     "https://studysphere-api.arguflow.ai/api/v1/card",
                     json=body,
-                    cookies=cookies.get("vault"),
+                    cookies={
+                        "vault": cookies.get("vault"),
+                    },
                 )
 
 
@@ -99,7 +103,7 @@ def upload_data(drive, filesIds, cookies):
 def upload_gdrive():
     if "google_credentials" not in flask.request.json:
         return flask.make_response("User is not google authed", 401)
-    if "vault" not in flask.request.cookies:
+    if "vault" not in flask.request.json:
         return flask.make_response("User is not arguflow authed", 401)
 
     # Load credentials from the session.
@@ -112,7 +116,7 @@ def upload_gdrive():
     )
 
     fileIds = flask.request.json["filesIds"]
-    Thread(target=upload_data, args=(drive, fileIds, flask.request.cookies)).start()
+    Thread(target=upload_data, args=(drive, fileIds, flask.request.json)).start()
     flask.session["google_credentials"] = credentials_to_dict(credentials)
     return flask.make_response("Success", 200)
 
