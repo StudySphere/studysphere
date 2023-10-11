@@ -65,6 +65,7 @@ const MainLayout = (props: LayoutProps) => {
   const [triggerScrollToBottom, setTriggerScrollToBottom] =
     createSignal<boolean>(false);
   const [quizMode, setQuizMode] = createSignal<boolean>(false);
+  const [answerMode, setAnswerMode] = createSignal<boolean>(false);
 
   createEffect(() => {
     const element = document.getElementById("topic-layout");
@@ -152,7 +153,14 @@ const MainLayout = (props: LayoutProps) => {
 
     const plain_new_message_content = new_message_content;
     if (quizMode()) {
-      new_message_content = `Give me only five to ten multiple choice and fill in the blank test questions on the subject of ${new_message_content} based on the following notes, and don't include any extra words or suggestions and DO NOT GIVE ME THE ANSWERS.`;
+      if (!answerMode()) {
+        new_message_content = `Give me only five to ten multiple choice and fill in the blank test questions on the subject of ${new_message_content} based on the following notes, and don't include any extra words or suggestions.`;
+        setAnswerMode(true);
+      } else {
+        new_message_content = `Check the following answers based on the previously-stated quiz questions: ${new_message_content}`;
+        setAnswerMode(false);
+        setQuizMode(false);
+      }
     }
     if (props.docText().length > 0) {
       new_message_content = `${props
@@ -457,7 +465,7 @@ const MainLayout = (props: LayoutProps) => {
                     setQuizMode((quizMode) => !quizMode);
                   }}
                   classList={{
-                    "my-2 flex max-w-fit flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700":
+                    "bg-beige my-2 flex max-w-fit flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200":
                       true,
                     "bg-secondary dark:bg-neutral-700": quizMode(),
                   }}
@@ -466,11 +474,15 @@ const MainLayout = (props: LayoutProps) => {
                     <span class="text-xl">
                       <BsPencilFill />
                     </span>
-                    <span>Quiz mode</span>
+                    <span>{answerMode() ? "Answer mode" : "Quiz mode"}</span>
                   </div>
                 </button>
                 <Show when={quizMode()}>
-                  <p class="pl-3">Insert the topic you want to quiz on:</p>
+                  <p class="bg-background pl-3">
+                    {answerMode()
+                      ? "Insert your answers to the above questions in the appropriate format:"
+                      : "Insert the topic you want to quiz on:"}
+                  </p>
                 </Show>
               </div>
               <div class="flex w-full flex-row">
