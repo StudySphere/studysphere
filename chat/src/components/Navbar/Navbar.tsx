@@ -1,3 +1,4 @@
+import { Show } from "solid-js";
 import { BiRegularMenuAltLeft, BiRegularPlus } from "solid-icons/bi";
 import { Setter } from "solid-js";
 import { Topic } from "~/types/topics";
@@ -24,8 +25,13 @@ export const Navbar = (props: NavbarProps) => {
         <p>
           {props.selectedTopic()?.resolution ??
             (props.isCreatingNormalTopic()
-              ? "New Normal Chat"
-              : "New Retrieval Augmented Chat")}
+              ? "Chat with all notes"
+              : "Chat with selected notes")}
+          <Show when={props.selectedTopic() !== undefined}>
+            {props.selectedTopic()?.normal_chat
+              ? " (Chatting with all notes)"
+              : " (Chatting with selected notes)"}
+          </Show>
         </p>
       </div>
       <div class="lg:hidden">

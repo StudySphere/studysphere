@@ -97,8 +97,8 @@ export const Sidebar = (props: SidebarProps) => {
         <div class="flex w-full flex-col space-y-2 px-2 py-2 ">
           <button
             onClick={() => {
-              props.setIsCreatingNormalTopic(false);
-              props.setIsCreatingTopic(true);
+              props.setIsCreatingNormalTopic(true);
+              props.setIsCreatingTopic(false);
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
@@ -108,13 +108,13 @@ export const Sidebar = (props: SidebarProps) => {
               <span class="text-xl">
                 <BiRegularPlus class="fill-current" />
               </span>
-              <span>Retrieval Augmented Chat</span>
+              <span>Chat with all notes</span>
             </div>
           </button>
           <button
             onClick={() => {
-              props.setIsCreatingTopic(false);
-              props.setIsCreatingNormalTopic(true);
+              props.setIsCreatingTopic(true);
+              props.setIsCreatingNormalTopic(false);
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
@@ -124,7 +124,7 @@ export const Sidebar = (props: SidebarProps) => {
               <span class="text-xl">
                 <BiRegularPlus class="fill-current" />
               </span>
-              <span>Normal Chat</span>
+              <span>Chat with selected notes</span>
             </div>
           </button>
         </div>

@@ -189,6 +189,7 @@ export const chat = () => {
             setSelectedTopic={setSelectedTopic}
             isCreatingNormalTopic={isCreatingNormalTopic}
             selectedTopic={selectedTopic}
+            setOpeniFrame={setOpeniFrame}
           />
         </div>
       </div>

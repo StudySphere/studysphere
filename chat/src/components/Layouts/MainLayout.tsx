@@ -21,13 +21,15 @@ import {
 } from "~/types/messages";
 import { Topic } from "~/types/topics";
 import { AfMessage } from "../Atoms/AfMessage";
-import { AiFillPlusCircle } from "solid-icons/ai";
+import { A } from "solid-start";
+import { BsPencilFill } from "solid-icons/bs";
 
 export interface LayoutProps {
   setTopics: Setter<Topic[]>;
   isCreatingNormalTopic: Accessor<boolean>;
   setSelectedTopic: Setter<Topic | undefined>;
   selectedTopic: Accessor<Topic | undefined>;
+  setOpeniFrame: Setter<boolean>;
 }
 
 const scrollToBottomOfMessages = () => {
@@ -60,6 +62,7 @@ const MainLayout = (props: LayoutProps) => {
     createSignal<boolean>(false);
   const [triggerScrollToBottom, setTriggerScrollToBottom] =
     createSignal<boolean>(false);
+  const [quizMode, setQuizMode] = createSignal<boolean>(false);
 
   createEffect(() => {
     const element = document.getElementById("topic-layout");
@@ -375,7 +378,7 @@ const MainLayout = (props: LayoutProps) => {
             </For>
           </div>
 
-          <div class="fixed bottom-0 right-0 flex w-full flex-col items-center space-y-4 bg-gradient-to-b from-transparent via-zinc-200 to-zinc-100 p-4 dark:via-zinc-800 dark:to-zinc-900 lg:w-4/5">
+          <div class="fixed bottom-0 right-0 flex w-full flex-col items-center space-y-4 via-zinc-200 to-zinc-100 p-4 dark:via-zinc-800 dark:to-zinc-900 lg:w-4/5">
             <Show when={messages().length > 0}>
               <div class="flex w-full justify-center">
                 <Show when={!streamingCompletion()}>
@@ -431,60 +434,82 @@ const MainLayout = (props: LayoutProps) => {
                 </Show>
               </div>
             </Show>
-            <div class="flex w-full flex-row space-x-2">
-              <form class="relative flex h-fit max-h-[calc(100vh-32rem)] w-full flex-col items-center overflow-y-auto rounded-xl bg-neutral-50 py-1 pl-4 pr-6 text-neutral-800 dark:bg-neutral-700 dark:text-white">
-                <button
-                  classList={{
-                    "flex h-10 w-10 items-center justify-center absolute left-[0px] bottom-0":
-                      true,
-                    "text-neutral-400": !newMessageContent(),
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                >
-                  <FaSolidPlus />
-                </button>
-                <textarea
-                  id="new-message-content-textarea"
-                  class="ml-10 w-full resize-none whitespace-pre-wrap bg-transparent py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none dark:bg-neutral-700 dark:text-white dark:scrollbar-track-neutral-700 dark:scrollbar-thumb-neutral-600"
-                  placeholder="Write a question or prompt for the assistant..."
-                  value={newMessageContent()}
-                  disabled={streamingCompletion()}
-                  onInput={(e) => resizeTextarea(e.target)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
+
+            <div class="flex w-full flex-col">
+              <button
+                onClick={() => {
+                  setQuizMode((quizMode) => !quizMode);
+                }}
+                classList={{
+                  "my-2 flex max-w-fit flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700":
+                    true,
+                  // "flex items-center space-x-4 py-2 w-full rounded-md": true,
+                  "bg-secondary dark:bg-neutral-700": quizMode(),
+                }}
+              >
+                <div class="flex flex-row items-center space-x-2">
+                  <span class="text-xl">
+                    <BsPencilFill />
+                  </span>
+                  <span>Quiz mode</span>
+                </div>
+              </button>
+              <div class="flex w-full flex-row space-x-2">
+                <form class="relative flex h-fit max-h-[calc(100vh-32rem)] w-full flex-col items-center overflow-y-auto rounded-xl bg-neutral-50 py-1 pl-4 pr-6 text-neutral-800 dark:bg-neutral-700 dark:text-white">
+                  <button
+                    classList={{
+                      "flex h-10 w-10 items-center justify-center absolute left-[0px] bottom-0":
+                        true,
+                      "text-neutral-400": !newMessageContent(),
+                    }}
+                    onClick={(e) => {
                       e.preventDefault();
-                      const new_message_content = newMessageContent();
-                      if (!new_message_content) {
+                      props.setOpeniFrame(true);
+                    }}
+                  >
+                    <FaSolidPlus />
+                  </button>
+                  <textarea
+                    id="new-message-content-textarea"
+                    class="ml-10 w-full resize-none whitespace-pre-wrap bg-transparent py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none dark:bg-neutral-700 dark:text-white dark:scrollbar-track-neutral-700 dark:scrollbar-thumb-neutral-600"
+                    placeholder="Write a question or prompt for the assistant..."
+                    value={newMessageContent()}
+                    disabled={streamingCompletion()}
+                    onInput={(e) => resizeTextarea(e.target)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        const new_message_content = newMessageContent();
+                        if (!new_message_content) {
+                          return;
+                        }
+                        const topic_id = props.selectedTopic()?.id;
+                        void fetchCompletion({
+                          new_message_content,
+                          topic_id,
+                        });
                         return;
                       }
-                      const topic_id = props.selectedTopic()?.id;
-                      void fetchCompletion({
-                        new_message_content,
-                        topic_id,
-                      });
-                      return;
-                    }
-                  }}
-                  rows="1"
-                />
-                <button
-                  type="submit"
-                  classList={{
-                    "flex h-10 w-10 items-center justify-center absolute right-[0px] bottom-0":
-                      true,
-                    "text-neutral-400": !newMessageContent(),
-                  }}
-                  disabled={!newMessageContent() || streamingCompletion()}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    submitNewMessage();
-                  }}
-                >
-                  <FiSend />
-                </button>
-              </form>
+                    }}
+                    rows="1"
+                  />
+                  <button
+                    type="submit"
+                    classList={{
+                      "flex h-10 w-10 items-center justify-center absolute right-[0px] bottom-0":
+                        true,
+                      "text-neutral-400": !newMessageContent(),
+                    }}
+                    disabled={!newMessageContent() || streamingCompletion()}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      submitNewMessage();
+                    }}
+                  >
+                    <FiSend />
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
