@@ -68,79 +68,81 @@ export const chat = () => {
     let selected_ids: any;
     window.document.addEventListener("ids_selected", (e) => {
       if (e.detail) {
+        console.log(e.detail);
         selected_ids = e.detail.split(",").slice(0, -1);
-      }
-    });
-    if (uploadingFiles()) {
-      fetch(`${apiHost}/user/set_api_key`, {
-        credentials: "include",
-        method: "GET",
-      })
-        .then((response) => {
-          if (response.ok) {
-            response
-              .json()
-              .then((data) => {
-                fetch(`${parserHost}/upload_gdrive`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  credentials: "include",
-                  body: JSON.stringify({
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    filesIds: selected_ids,
-                    google_credentials: localStorage.getItem("accessToken"),
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-                    vault_api_key: data.api_key,
-                  }),
-                })
-                  .then((response) => {
-                    if (response.ok) {
-                      console.log("success");
-                    }
+        if (uploadingFiles()) {
+          fetch(`${apiHost}/user/set_api_key`, {
+            credentials: "include",
+            method: "GET",
+          })
+            .then((response) => {
+              if (response.ok) {
+                response
+                  .json()
+                  .then((data) => {
+                    fetch(`${parserHost}/upload_gdrive`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      credentials: "include",
+                      body: JSON.stringify({
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        filesIds: selected_ids,
+                        google_credentials: localStorage.getItem("accessToken"),
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+                        vault_api_key: data.api_key,
+                      }),
+                    })
+                      .then((response) => {
+                        if (response.ok) {
+                          console.log("success");
+                        }
+                      })
+                      .catch((e) => {
+                        console.log(e);
+                      });
                   })
                   .catch((e) => {
                     console.log(e);
                   });
-              })
-              .catch((e) => {
-                console.log(e);
-              });
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else if (getSpecficFiles()) {
-      fetch(`${parserHost}/get_text`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          filesIds: selected_ids,
-          google_credentials: localStorage.getItem("accessToken"),
-        }),
-      })
-        .then((response) => {
-          if (response.ok) {
-            response
-              .json()
-              .then((data) => {
-                setDocText(data);
-              })
-              .catch((e) => {
-                console.log(e);
-              });
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        } else if (getSpecficFiles()) {
+          fetch(`${parserHost}/get_text`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+              filesIds: selected_ids,
+              google_credentials: localStorage.getItem("accessToken"),
+            }),
+          })
+            .then((response) => {
+              if (response.ok) {
+                response
+                  .text()
+                  .then((data) => {
+                    setDocText(data);
+                    console.log(data);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      }
+    });
   });
 
   const refetchTopics = async (): Promise<Topic[]> => {
@@ -178,7 +180,7 @@ export const chat = () => {
           name="file_picker"
         />
       </FullScreenModal>
-      <div class="relative flex h-screen flex-row bg-background dark:bg-zinc-900">
+      <div class="dark:bg-zinc-900 relative flex h-screen flex-row bg-background">
         <div class="hidden w-1/4 overflow-x-hidden lg:block">
           <Sidebar
             currentTopic={selectedTopic}
@@ -212,7 +214,7 @@ export const chat = () => {
         </div>
         <div
           id="topic-layout"
-          class="w-full overflow-y-auto scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"
+          class="dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 w-full overflow-y-auto scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md"
         >
           <Navbar
             selectedTopic={selectedTopic}

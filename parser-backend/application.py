@@ -302,7 +302,7 @@ def get_text():
 
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
-        **flask.request.json.get("google_credentials"),
+        token=flask.request.json.get("google_credentials"),
     )
 
     drive = googleapiclient.discovery.build(
