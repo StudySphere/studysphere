@@ -152,7 +152,7 @@ const MainLayout = (props: LayoutProps) => {
 
     const plain_new_message_content = new_message_content;
     if (quizMode()) {
-      new_message_content = `Give me only five to ten multiple choice and fill in the blank test questions on the subject of ${new_message_content} based on the following notes, and don't include any extra words or suggestions.`;
+      new_message_content = `Give me only five to ten multiple choice and fill in the blank test questions on the subject of ${new_message_content} based on the following notes, and don't include any extra words or suggestions and DO NOT GIVE ME THE ANSWERS.`;
     }
     if (props.docText().length > 0) {
       new_message_content = `${props

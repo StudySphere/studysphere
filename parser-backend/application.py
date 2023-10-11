@@ -43,7 +43,9 @@ CORS(
 def upload_data(drive, filesIds, js):
     for file_id in filesIds:
         file = (
-            drive.files().get(fileId=file_id, fields="webViewLink, mimeType").execute()
+            drive.files()
+            .get(fileId=file_id, fields="webViewLink, mimeType,name")
+            .execute()
         )
         if (
             file["mimeType"] == "application/vnd.google-apps.document"
@@ -70,6 +72,9 @@ def upload_data(drive, filesIds, js):
                         "link": file["webViewLink"],
                         "tags": [file["mimeType"]],
                         "private": True,
+                        "metadata": {
+                            "name": file["name"],
+                        },
                     }
                     r = requests.post(
                         "https://studysphere-backend.arguflow.ai/api/card",
@@ -99,6 +104,9 @@ def upload_data(drive, filesIds, js):
                     "link": file["webViewLink"],
                     "tags": [file["mimeType"]],
                     "private": True,
+                    "metadata": {
+                        "name": file["name"],
+                    },
                 }
                 r = requests.post(
                     "https://studysphere-backend.arguflow.ai/api/card",

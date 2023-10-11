@@ -70,7 +70,7 @@ export const chat = () => {
       if (e.detail) {
         console.log(e.detail);
         selected_ids = e.detail.split(",").slice(0, -1);
-        if (uploadingFiles()) {
+        if (!getSpecficFiles()) {
           fetch(`${apiHost}/user/set_api_key`, {
             credentials: "include",
             method: "GET",
@@ -97,6 +97,7 @@ export const chat = () => {
                       .then((response) => {
                         if (response.ok) {
                           console.log("success");
+                          setUploadingFiles(false);
                         }
                       })
                       .catch((e) => {
@@ -130,6 +131,7 @@ export const chat = () => {
                   .text()
                   .then((data) => {
                     setDocText(JSON.parse(data));
+                    setGetSpecficFiles(false);
                     console.log(data);
                   })
                   .catch((e) => {
