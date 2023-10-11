@@ -48,9 +48,9 @@ def upload_data(drive, filesIds, cookies):
             or file["mimeType"] == "application/vnd.google-apps.presentation"
         ):
             request = drive.files().export_media(fileId=file_id, mimeType="text/plain")
-            file = io.BytesIO(request.execute())
-            file.seek(0)
-            docfile = file.read().decode("utf-8")
+            binfile = io.BytesIO(request.execute())
+            binfile.seek(0)
+            docfile = binfile.read().decode("utf-8")
             doc = nlp(docfile)
             combined_list = [
                 doc[i].text + " " + doc[i + 1].text
@@ -73,8 +73,8 @@ def upload_data(drive, filesIds, cookies):
                 )
         else:
             request = drive.files().get_media(fileId=file_id)
-            file = io.BytesIO(request.execute())
-            binaryFile = p.from_buffer(file)
+            binfile = io.BytesIO(request.execute())
+            binaryFile = p.from_buffer(binfile)
             docfile = binaryFile["content"].strip()
             doc = nlp(docfile)
             combined_list = [
