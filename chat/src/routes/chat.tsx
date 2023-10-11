@@ -129,7 +129,7 @@ export const chat = () => {
                 response
                   .text()
                   .then((data) => {
-                    setDocText(data);
+                    setDocText(JSON.parse(data));
                     console.log(data);
                   })
                   .catch((e) => {

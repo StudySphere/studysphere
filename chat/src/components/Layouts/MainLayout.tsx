@@ -91,7 +91,6 @@ const MainLayout = (props: LayoutProps) => {
       });
     });
   });
-
   createEffect(() => {
     window.addEventListener("wheel", (event) => {
       const delta = Math.sign(event.deltaY);
