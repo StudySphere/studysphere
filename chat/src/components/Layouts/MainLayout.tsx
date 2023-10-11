@@ -485,7 +485,7 @@ const MainLayout = (props: LayoutProps) => {
                     id="new-message-content-textarea"
                     class="ml-10 w-full resize-none whitespace-pre-wrap bg-transparent py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none"
                     placeholder={
-                      !props.isCreatingNormalTopic() &&
+                      props.isCreatingNormalTopic() &&
                       props.docText().length === 0
                         ? "Specify documents to chat with!"
                         : "Write a question or prompt for the assistant..."
@@ -493,7 +493,7 @@ const MainLayout = (props: LayoutProps) => {
                     value={newMessageContent()}
                     disabled={
                       streamingCompletion() ||
-                      (!props.isCreatingNormalTopic() &&
+                      (props.isCreatingNormalTopic() &&
                         props.docText().length === 0)
                     }
                     onInput={(e) => resizeTextarea(e.target)}

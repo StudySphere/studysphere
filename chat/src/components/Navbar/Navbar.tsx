@@ -14,7 +14,7 @@ export interface NavbarProps {
 
 export const Navbar = (props: NavbarProps) => {
   return (
-    <div class="flex w-full items-center justify-between border-b border-neutral-200 px-5 py-2 font-semibold text-neutral-800 dark:border-neutral-800 dark:text-white md:text-xl">
+    <div class="dark:border-neutral-800 dark:text-white flex w-full items-center justify-between border-b border-neutral-200 px-5 py-2 font-semibold text-neutral-800 md:text-xl">
       <div class="lg:hidden">
         <BiRegularMenuAltLeft
           onClick={() => props.setSideBarOpen((prev) => !prev)}
@@ -24,11 +24,11 @@ export const Navbar = (props: NavbarProps) => {
       <div class="flex w-full items-center justify-center px-2 text-center">
         <p>
           {props.selectedTopic()?.resolution ??
-            (props.isCreatingNormalTopic()
+            (!props.isCreatingNormalTopic()
               ? "Chat with all notes"
               : "Chat with selected notes")}
           <Show when={props.selectedTopic() !== undefined}>
-            {props.selectedTopic()?.normal_chat
+            {!props.selectedTopic()?.normal_chat
               ? " (Chatting with all notes)"
               : " (Chatting with selected notes)"}
           </Show>

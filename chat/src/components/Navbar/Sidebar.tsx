@@ -101,8 +101,8 @@ export const Sidebar = (props: SidebarProps) => {
           </a>
           <button
             onClick={() => {
-              props.setIsCreatingNormalTopic(true);
-              props.setIsCreatingTopic(false);
+              props.setIsCreatingNormalTopic(false);
+              props.setIsCreatingTopic(true);
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
@@ -117,8 +117,8 @@ export const Sidebar = (props: SidebarProps) => {
           </button>
           <button
             onClick={() => {
-              props.setIsCreatingTopic(true);
-              props.setIsCreatingNormalTopic(false);
+              props.setIsCreatingTopic(false);
+              props.setIsCreatingNormalTopic(true);
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
@@ -219,10 +219,7 @@ export const Sidebar = (props: SidebarProps) => {
         <div class="dark:border-neutral-400 flex w-full flex-col space-y-1 border-t px-2 py-2">
           <button
             class="dark:hover:bg-neutral-700 flex w-full items-center  space-x-4 rounded-md px-3 py-2   hover:bg-neutral-200"
-            onClick={() => {
-              props.setOpeniFrame(true);
-              props.setUploadingFiles(true);
-            }}
+            onClick={() => props.setOpeniFrame(true)}
           >
             <BiRegularUpload class="h-6 w-6 fill-current" />
             <div>Upload Files</div>
