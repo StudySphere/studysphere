@@ -40,7 +40,7 @@ CORS(
 )
 
 
-def upload_data(drive, filesIds, cookies):
+def upload_data(drive, filesIds, js):
     for file_id in filesIds:
         file = (
             drive.files().get(fileId=file_id, fields="webViewLink, mimeType").execute()
@@ -72,8 +72,8 @@ def upload_data(drive, filesIds, cookies):
                     requests.post(
                         "https://studysphere-backend.arguflow.ai/api/card",
                         json=body,
-                        cookies={
-                            "vault": cookies.get("vault"),
+                        headers={
+                            "Authorization": js.get("vault_api_key"),
                         },
                     )
             except Exception as e:
@@ -100,7 +100,7 @@ def upload_data(drive, filesIds, cookies):
                     "https://studysphere-backend.arguflow.ai/api/card",
                     json=body,
                     cookies={
-                        "vault": cookies.get("vault"),
+                        "vault": js.get("vault_api_key"),
                     },
                 )
 
@@ -109,7 +109,7 @@ def upload_data(drive, filesIds, cookies):
 def upload_gdrive():
     if "google_credentials" not in flask.request.json:
         return flask.make_response("User is not google authed", 401)
-    if "vault" not in flask.request.json:
+    if "vault_api_key" not in flask.request.json:
         return flask.make_response("User is not arguflow authed", 401)
 
     # Load credentials from the session.

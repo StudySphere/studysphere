@@ -65,6 +65,26 @@ export const chat = () => {
 
     window.document.addEventListener("ids_selected", (e) => {
       if (e.detail) {
+        let api_key;
+        fetch(`${apiHost}/user/set_api_key`, {
+          credentials: "include",
+          method: "GET",
+        })
+          .then((response) => {
+            if (response.ok) {
+              response
+                .json()
+                .then((data) => {
+                  api_key = data.api_key;
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
         fetch(`${parserHost}/upload_gdrive`, {
           method: "POST",
           headers: {
@@ -74,13 +94,17 @@ export const chat = () => {
           body: JSON.stringify({
             filesIds: e.detail.split(",").slice(0, -1),
             google_credentials: localStorage.getItem("accessToken"),
-            vault: getCookie("vault"),
+            vault_api_key: api_key,
           }),
-        }).then((response) => {
-          if (response.ok) {
-            console.log("success");
-          }
-        });
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("success");
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       }
     });
   });
