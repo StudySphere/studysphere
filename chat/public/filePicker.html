@@ -92,7 +92,6 @@
       function createPicker() {
         localStorage.setItem("accessToken", accessToken);
         const picker = new google.picker.PickerBuilder()
-          .enableFeature(google.picker.Feature.NAV_HIDDEN)
           .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
           .setDeveloperKey(API_KEY)
           .setAppId(APP_ID)
@@ -113,24 +112,14 @@
        */
       async function pickerCallback(data) {
         if (data.action === google.picker.Action.PICKED) {
-          let text = `Picker response: \n${JSON.stringify(data, null, 2)}\n`;
-          const document = data[google.picker.Response.DOCUMENTS][0];
-          const fileId = document[google.picker.Document.ID];
-          console.log(fileId);
-          const res = await gapi.client.drive.files.get({
-            fileId: fileId,
-            fields: "*",
-          });
-          text += `Drive API response for first document: \n${JSON.stringify(
-            res.result,
-            null,
-            2,
-          )}\n`;
-          for (const doc in res.result["docs"]) {
-            const id = doc["id"];
-            text += `${id},`;
+          let text = "";
+          for (const document in data[google.picker.Response.DOCUMENTS]) {
+            doc = data[google.picker.Response.DOCUMENTS][document];
+            const fileId = doc[google.picker.Document.ID];
+            text += fileId + ",";
           }
-          localStorage.setItem("selectedFileId", fileId);
+          var event = new CustomEvent("ids_selected", { detail: text });
+          window.parent.document.dispatchEvent(event);
         }
       }
     </script>

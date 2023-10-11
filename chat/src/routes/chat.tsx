@@ -9,6 +9,7 @@ import { Topic } from "~/types/topics";
 
 export const chat = () => {
   const apiHost: string = import.meta.env.VITE_API_HOST as unknown as string;
+  const parserHost = "https://studysphere-parser.arguflow.ai";
 
   const [searchParams] = useSearchParams();
   const [selectedTopic, setSelectedTopic] = createSignal<Topic | undefined>(
@@ -43,6 +44,26 @@ export const chat = () => {
       ) {
         window.location.href = "/auth/login";
         return;
+      }
+    });
+
+    window.document.addEventListener("ids_selected", (e) => {
+      if (e.detail) {
+        fetch(`${parserHost}/gdrive_upload`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            filesIds: e.detail.split(",").slice(0, -1),
+            google_credentials: localStorage.getItem("accessToken"),
+          }),
+        }).then((response) => {
+          if (response.ok) {
+            console.log("success");
+          }
+        });
       }
     });
   });

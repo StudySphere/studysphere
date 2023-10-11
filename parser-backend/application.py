@@ -33,10 +33,10 @@ app = flask.Flask(__name__)
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config["SESSION_COOKIE_DOMAIN"] = "studysphere-parser.arguflow.ai"
-CORS(app)
+CORS(app, supports_credentials=True)
 
 
-def upload_data(drive, filesIds):
+def upload_data(drive, filesIds, cookies):
     for file_id in filesIds:
         file = drive.files().get(fileId=file_id).execute()
         if (
@@ -64,7 +64,7 @@ def upload_data(drive, filesIds):
                 requests.post(
                     "https://studysphere-api.arguflow.ai/api/v1/card",
                     json=body,
-                    cookies=flask.session["vault"],
+                    cookies=cookies.get("vault"),
                 )
         else:
             request = drive.files().get_media(fileId=file_id)
@@ -87,28 +87,28 @@ def upload_data(drive, filesIds):
                 requests.post(
                     "https://studysphere-api.arguflow.ai/api/v1/card",
                     json=body,
-                    cookies=flask.session["vault"],
+                    cookies=cookies.get("vault"),
                 )
 
 
 @app.route("/upload_gdrive", methods=["POST"])
 def upload_gdrive():
-    if "google_credentials" not in flask.session:
-        return flask.redirect(flask.url_for("authorize"))
-    if "vault" not in flask.session:
+    if "google_credentials" not in flask.request.json:
+        return flask.make_response("User is not google authed", 401)
+    if "vault" not in flask.request.cookies:
         return flask.make_response("User is not arguflow authed", 401)
 
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
-        **flask.session["google_credentials"]
+        token=flask.request.json.get("google_credentials"),
     )
 
     drive = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials
     )
 
-    fileIds = flask.request.json()["filesIds"]
-    Thread(target=upload_data, args=(drive, fileIds)).start()
+    fileIds = flask.request.json["filesIds"]
+    Thread(target=upload_data, args=(drive, fileIds, flask.request.cookies)).start()
     flask.session["google_credentials"] = credentials_to_dict(credentials)
     return flask.make_response("Success", 200)
 
