@@ -99,7 +99,7 @@ def upload_data(drive, filesIds, cookies):
                 )
 
 
-@app.route("/upload_gdrive", methods=["POST", "OPTIONS"])
+@app.route("/upload_gdrive", methods=["POST"])
 def upload_gdrive():
     if "google_credentials" not in flask.request.json:
         return flask.make_response("User is not google authed", 401)
