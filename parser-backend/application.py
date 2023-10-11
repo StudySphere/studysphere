@@ -122,7 +122,8 @@ def upload_gdrive():
     )
 
     fileIds = flask.request.json["filesIds"]
-    Thread(target=upload_data, args=(drive, fileIds, flask.request.json)).start()
+    upload_data(drive, fileIds, flask.request.json)
+    # Thread(target=upload_data, args=(drive, fileIds, flask.request.json)).start()
     flask.session["google_credentials"] = credentials_to_dict(credentials)
     return flask.make_response("Success", 200)
 
