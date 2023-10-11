@@ -30,6 +30,7 @@ export interface LayoutProps {
   setSelectedTopic: Setter<Topic | undefined>;
   selectedTopic: Accessor<Topic | undefined>;
   setOpeniFrame: Setter<boolean>;
+  setGetSpecficFiles: Setter<boolean>;
 }
 
 const scrollToBottomOfMessages = () => {
@@ -442,7 +443,8 @@ const MainLayout = (props: LayoutProps) => {
             <div class="flex w-full flex-col">
               <div class="flex items-center">
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     setQuizMode((quizMode) => !quizMode);
                   }}
                   classList={{
@@ -474,6 +476,7 @@ const MainLayout = (props: LayoutProps) => {
                     onClick={(e) => {
                       e.preventDefault();
                       props.setOpeniFrame(true);
+                      props.setGetSpecficFiles(true);
                     }}
                   >
                     <FaSolidPlus />

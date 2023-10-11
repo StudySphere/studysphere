@@ -297,12 +297,12 @@ def logout():
 
 @app.route("/get_text", methods=["POST"])
 def get_text():
-    if "google_credentials" not in flask.session:
-        return flask.redirect(flask.url_for("authorize"))
+    if "google_credentials" not in flask.request.json:
+        return flask.make_response("User is not google authed", 401)
 
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
-        **flask.session["google_credentials"]
+        **flask.request.json.get("google_credentials"),
     )
 
     drive = googleapiclient.discovery.build(
@@ -320,15 +320,14 @@ def get_text():
             file = io.BytesIO(request.execute())
             file.seek(0)
             docfile = file.read().decode("utf-8")
-            response.append({"file_name": file_id, "file_text": docfile})
+            response.append(docfile)
         else:
             request = drive.files().get_media(fileId=file_id)
             file = io.BytesIO(request.execute())
             binaryFile = p.from_buffer(file)
             docfile = binaryFile["content"].strip()
-            response.append({"file_name": file_id, "file_text": docfile})
+            response.append(docfile)
 
-    flask.session["google_credentials"] = credentials_to_dict(credentials)
     return flask.jsonify(response)
 
 

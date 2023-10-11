@@ -20,6 +20,7 @@ export interface SidebarProps {
   setSideBarOpen: Setter<boolean>;
   setIsCreatingNormalTopic: Setter<boolean>;
   setOpeniFrame: Setter<boolean>;
+  setUploadingFiles: Setter<boolean>;
 }
 
 export const Sidebar = (props: SidebarProps) => {
@@ -210,7 +211,10 @@ export const Sidebar = (props: SidebarProps) => {
         <div class="flex w-full flex-col space-y-1 border-t px-2 py-2 dark:border-neutral-400">
           <button
             class="flex w-full items-center space-x-4  rounded-md px-3 py-2 hover:bg-neutral-200   dark:hover:bg-neutral-700"
-            onClick={() => props.setOpeniFrame(true)}
+            onClick={() => {
+              props.setOpeniFrame(true);
+              props.setUploadingFiles(true);
+            }}
           >
             <BiRegularUpload class="h-6 w-6 fill-current" />
             <div>Upload Files</div>

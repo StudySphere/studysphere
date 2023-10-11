@@ -23,7 +23,9 @@ export const chat = () => {
     createSignal<boolean>(false);
   const [topics, setTopics] = createSignal<Topic[]>([]);
   const [isLogin, setIsLogin] = createSignal<boolean>(false);
-
+  const [docText, setDocText] = createSignal<string[]>([]);
+  const [uploadingFiles, setUploadingFiles] = createSignal<boolean>(false);
+  const [getSpecficFiles, setGetSpecficFiles] = createSignal<boolean>(false);
   detectReferralToken(searchParams.t);
 
   createEffect(() => {
@@ -63,49 +65,82 @@ export const chat = () => {
       return "";
     }
 
+    let selected_ids: any;
     window.document.addEventListener("ids_selected", (e) => {
       if (e.detail) {
-        let api_key;
-        fetch(`${apiHost}/user/set_api_key`, {
-          credentials: "include",
-          method: "GET",
-        })
-          .then((response) => {
-            if (response.ok) {
-              response
-                .json()
-                .then((data) => {
-                  fetch(`${parserHost}/upload_gdrive`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                      filesIds: e.detail.split(",").slice(0, -1),
-                      google_credentials: localStorage.getItem("accessToken"),
-                      vault_api_key: data.api_key,
-                    }),
-                  })
-                    .then((response) => {
-                      if (response.ok) {
-                        console.log("success");
-                      }
-                    })
-                    .catch((e) => {
-                      console.log(e);
-                    });
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+        selected_ids = e.detail.split(",").slice(0, -1);
       }
     });
+    if (uploadingFiles()) {
+      fetch(`${apiHost}/user/set_api_key`, {
+        credentials: "include",
+        method: "GET",
+      })
+        .then((response) => {
+          if (response.ok) {
+            response
+              .json()
+              .then((data) => {
+                fetch(`${parserHost}/upload_gdrive`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  credentials: "include",
+                  body: JSON.stringify({
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    filesIds: selected_ids,
+                    google_credentials: localStorage.getItem("accessToken"),
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+                    vault_api_key: data.api_key,
+                  }),
+                })
+                  .then((response) => {
+                    if (response.ok) {
+                      console.log("success");
+                    }
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else if (getSpecficFiles()) {
+      fetch(`${parserHost}/get_text`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+          filesIds: selected_ids,
+          google_credentials: localStorage.getItem("accessToken"),
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            response
+              .json()
+              .then((data) => {
+                setDocText(data);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   });
 
   const refetchTopics = async (): Promise<Topic[]> => {
@@ -136,6 +171,13 @@ export const chat = () => {
 
   return (
     <Show when={isLogin()}>
+      <FullScreenModal isOpen={openiFrame} setIsOpen={setOpeniFrame}>
+        <iframe
+          src="/filePicker.html"
+          class="min-h-[1000px] min-w-[1000px]"
+          name="file_picker"
+        />
+      </FullScreenModal>
       <div class="relative flex h-screen flex-row bg-background dark:bg-zinc-900">
         <div class="hidden w-1/4 overflow-x-hidden lg:block">
           <Sidebar
@@ -147,6 +189,7 @@ export const chat = () => {
             setSideBarOpen={setSideBarOpen}
             setIsCreatingNormalTopic={setIsCreatingNormalTopic}
             setOpeniFrame={setOpeniFrame}
+            setUploadingFiles={setUploadingFiles}
           />
         </div>
         <div class="lg:hidden">
@@ -163,6 +206,7 @@ export const chat = () => {
               setSideBarOpen={setSideBarOpen}
               setIsCreatingNormalTopic={setIsCreatingNormalTopic}
               setOpeniFrame={setOpeniFrame}
+              setUploadingFiles={setUploadingFiles}
             />
           </Show>
         </div>
@@ -178,18 +222,13 @@ export const chat = () => {
             isCreatingNormalTopic={isCreatingNormalTopic}
             setIsCreatingNormalTopic={setIsCreatingNormalTopic}
           />
-          <FullScreenModal isOpen={openiFrame} setIsOpen={setOpeniFrame}>
-            <iframe
-              src="/filePicker.html"
-              class="min-h-[1000px] min-w-[1000px]"
-            />
-          </FullScreenModal>
           <MainLayout
             setTopics={setTopics}
             setSelectedTopic={setSelectedTopic}
             isCreatingNormalTopic={isCreatingNormalTopic}
             selectedTopic={selectedTopic}
             setOpeniFrame={setOpeniFrame}
+            setGetSpecficFiles={setGetSpecficFiles}
           />
         </div>
       </div>

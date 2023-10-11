@@ -19,7 +19,9 @@ export const FullScreenModal = (props: FullScreenModalProps) => {
       <Dialog
         isOpen={props.isOpen()}
         class="overflow-none fixed inset-0 z-10"
-        onClose={() => props.setIsOpen(false)}
+        onClose={() => {
+          props.setIsOpen(false);
+        }}
       >
         <div class="flex h-screen items-center justify-center px-4">
           <TransitionChild

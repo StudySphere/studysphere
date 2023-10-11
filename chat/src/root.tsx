@@ -13,12 +13,9 @@ import {
 } from "solid-start";
 import UserStoreContext from "./components/contexts/UserStoreContext";
 import "./root.css";
-import { createEffect } from "solid-js";
 import ShowToast from "./components/ShowToast";
 
 export default function Root() {
-  const plausibleHost = import.meta.env.VITE_PLAUSIBLE_HOST as string;
-
   const theme = (() => {
     if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
       return localStorage.getItem("theme");
