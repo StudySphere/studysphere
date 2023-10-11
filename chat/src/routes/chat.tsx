@@ -75,31 +75,30 @@ export const chat = () => {
               response
                 .json()
                 .then((data) => {
-                  api_key = data.api_key;
+                  fetch(`${parserHost}/upload_gdrive`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                      filesIds: e.detail.split(",").slice(0, -1),
+                      google_credentials: localStorage.getItem("accessToken"),
+                      vault_api_key: data.api_key,
+                    }),
+                  })
+                    .then((response) => {
+                      if (response.ok) {
+                        console.log("success");
+                      }
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                    });
                 })
                 .catch((e) => {
                   console.log(e);
                 });
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-        fetch(`${parserHost}/upload_gdrive`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            filesIds: e.detail.split(",").slice(0, -1),
-            google_credentials: localStorage.getItem("accessToken"),
-            vault_api_key: api_key,
-          }),
-        })
-          .then((response) => {
-            if (response.ok) {
-              console.log("success");
             }
           })
           .catch((e) => {
