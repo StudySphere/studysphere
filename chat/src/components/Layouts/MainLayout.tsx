@@ -151,8 +151,14 @@ const MainLayout = (props: LayoutProps) => {
     let finalTopicId = topic_id;
     setStreamingCompletion(true);
 
+    const plain_new_message_content = new_message_content;
     if (quizMode()) {
       new_message_content = `Give me only five to ten multiple choice and fill in the blank test questions on the subject of ${new_message_content} based on the following notes, and don't include any extra words or suggestions.`;
+    }
+    if (props.docText().length > 0) {
+      new_message_content = `${props
+        .docText()
+        .join(" ")} ${new_message_content}`;
     }
 
     if (!finalTopicId) {
@@ -223,11 +229,14 @@ const MainLayout = (props: LayoutProps) => {
         if (prev.length === 0) {
           return [
             { content: "" },
-            { content: new_message_content },
+            { content: plain_new_message_content },
             { content: "" },
           ];
         }
-        const newMessages = [{ content: new_message_content }, { content: "" }];
+        const newMessages = [
+          { content: plain_new_message_content },
+          { content: "" },
+        ];
         return [...prev, ...newMessages];
       });
     }
@@ -467,20 +476,22 @@ const MainLayout = (props: LayoutProps) => {
               </div>
               <div class="flex w-full flex-row">
                 <form class="relative flex h-fit max-h-[calc(100vh-32rem)] w-full flex-col items-center overflow-y-auto overflow-x-hidden rounded-xl bg-neutral-50 py-1 pl-4 pr-6 text-neutral-800">
-                  <button
-                    classList={{
-                      "flex h-10 w-10 items-center justify-center absolute left-[0px] bottom-0":
-                        true,
-                      "text-neutral-400": !newMessageContent(),
-                    }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      props.setOpeniFrame(true);
-                      props.setGetSpecficFiles(true);
-                    }}
-                  >
-                    <FaSolidPlus />
-                  </button>
+                  <Show when={props.isCreatingNormalTopic()}>
+                    <button
+                      classList={{
+                        "flex h-10 w-10 items-center justify-center absolute left-[0px] bottom-0":
+                          true,
+                        "text-neutral-400": !newMessageContent(),
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        props.setOpeniFrame(true);
+                        props.setGetSpecficFiles(true);
+                      }}
+                    >
+                      <FaSolidPlus />
+                    </button>
+                  </Show>
                   <textarea
                     id="new-message-content-textarea"
                     class="ml-10 w-full resize-none whitespace-pre-wrap bg-transparent py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none"
