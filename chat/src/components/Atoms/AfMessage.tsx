@@ -68,7 +68,7 @@ export const AfMessage = (props: AfMessageProps) => {
           <div
             classList={{
               "dark:text-white md:px-6 w-full px-4 py-4 flex items-start": true,
-              "bg-neutral-200 dark:bg-zinc-700": props.role === "assistant",
+              "bg-pink-50 dark:bg-zinc-700": props.role === "assistant",
               "bg-neutral-50 dark:bg-zinc-800": props.role === "user",
             }}
             onMouseEnter={() => setShowEditingIcon(true)}
@@ -83,7 +83,7 @@ export const AfMessage = (props: AfMessageProps) => {
               {props.role === "user" ? (
                 <BiSolidUserRectangle class="fill-current" />
               ) : (
-                <AiFillRobot class="fill-current" />
+                <img class="max-w-5 max-h-5" src="./logo.png" />
               )}
               <div
                 classList={{

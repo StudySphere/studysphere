@@ -92,8 +92,8 @@ export const Sidebar = (props: SidebarProps) => {
   };
 
   return (
-    <div class="absolute z-50 flex h-screen w-screen flex-row dark:text-gray-50 lg:relative lg:w-full">
-      <div class="flex h-full w-2/3 flex-col bg-neutral-50 dark:bg-neutral-800 lg:w-full">
+    <div class="absolute z-50 flex h-screen w-screen flex-row bg-beige dark:text-gray-50 lg:relative lg:w-full">
+      <div class="flex h-full w-2/3 flex-col bg-beige-900 dark:bg-neutral-800 lg:w-full">
         <div class="flex w-full flex-col space-y-2 px-2 py-2 ">
           <button
             onClick={() => {
@@ -102,7 +102,7 @@ export const Sidebar = (props: SidebarProps) => {
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
-            class="flex w-full flex-row items-center rounded-md border border-neutral-500 px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
+            class="flex w-full flex-row items-center rounded-md border border-primary px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
           >
             <div class="flex flex-row items-center space-x-2">
               <span class="text-xl">
@@ -118,7 +118,7 @@ export const Sidebar = (props: SidebarProps) => {
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
-            class="flex w-full flex-row items-center rounded-md border border-neutral-500 px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
+            class="flex w-full flex-row items-center rounded-md border border-primary px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
           >
             <div class="flex flex-row items-center space-x-2">
               <span class="text-xl">
@@ -221,7 +221,7 @@ export const Sidebar = (props: SidebarProps) => {
             <div>Upload Files</div>
           </button>
           <button
-            class="flex w-full items-center space-x-4  rounded-md px-3 py-2 hover:bg-neutral-200   dark:hover:bg-neutral-700"
+            class="flex w-full items-center space-x-4 rounded-md px-3 py-2 hover:bg-neutral-200   dark:hover:bg-neutral-700"
             onClick={logout}
           >
             <BiRegularLogOut class="h-6 w-6 fill-current" />
@@ -231,15 +231,16 @@ export const Sidebar = (props: SidebarProps) => {
             class="flex w-full items-center space-x-4 rounded-md px-3 py-2 hover:bg-neutral-200 dark:hover:bg-neutral-700"
             onClick={() => setSettingsModalOpen(true)}
           >
-            <FiSettings class="h-6 w-6" />
+            <FiSettings class="color-primary h-6 w-6" />
             <div>Settings</div>
           </button>
           <a
             href="https://github.com/arguflow/arguflow"
             class="flex items-center space-x-1 px-3 py-2"
           >
-            <div>
-              <div class="align-top text-lg">
+            <div class="flex items-center">
+              <img class="max-w-[50px]" src="./logo.png" />
+              <div class="pl-2 text-lg">
                 <span>StudySphere</span>
               </div>
             </div>

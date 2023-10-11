@@ -82,6 +82,10 @@ module.exports = {
           900: "#0C050E",
           950: "#000000",
         },
+        beige: {
+          DEFAULT: "#f5f4ef",
+          900: "#ebe9e0",
+        },
         primary: {
           DEFAULT: "#f9cfd0",
         },
