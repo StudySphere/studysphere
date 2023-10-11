@@ -21,7 +21,6 @@ import {
 } from "~/types/messages";
 import { Topic } from "~/types/topics";
 import { AfMessage } from "../Atoms/AfMessage";
-import { A } from "solid-start";
 import { BsPencilFill } from "solid-icons/bs";
 
 export interface LayoutProps {

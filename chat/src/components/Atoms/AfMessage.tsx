@@ -1,5 +1,4 @@
 import { BiRegularEdit, BiSolidUserRectangle } from "solid-icons/bi";
-import { AiFillRobot } from "solid-icons/ai";
 import {
   Accessor,
   For,
@@ -92,7 +91,7 @@ export const AfMessage = (props: AfMessageProps) => {
                     !!cardMetadatas(),
                 }}
               >
-                <div class="col-span-2 whitespace-pre-line text-neutral-800 dark:text-neutral-50">
+                <div class="dark:text-neutral-50 col-span-2 whitespace-pre-line text-neutral-800">
                   {editedContent() || displayMessage().content.trimStart()}
                 </div>
                 <Show when={!displayMessage().content}>
@@ -145,7 +144,7 @@ export const AfMessage = (props: AfMessageProps) => {
             <form class="w-full">
               <textarea
                 id="new-message-content-textarea"
-                class="max-h-[180px] w-full resize-none whitespace-pre-wrap rounded bg-transparent p-2 py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none dark:bg-neutral-700 dark:text-white dark:scrollbar-track-neutral-700 dark:scrollbar-thumb-neutral-600"
+                class="dark:bg-neutral-700 dark:text-white dark:scrollbar-track-neutral-700 dark:scrollbar-thumb-neutral-600 max-h-[180px] w-full resize-none whitespace-pre-wrap rounded bg-transparent p-2 py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none"
                 placeholder="Write a question or prompt for the assistant..."
                 value={editingMessageContent()}
                 onInput={(e) => resizeTextarea(e.target)}

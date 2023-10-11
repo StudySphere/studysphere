@@ -99,9 +99,12 @@
           .setOAuthToken(accessToken)
           .addViewGroup(
             new google.picker.ViewGroup(google.picker.ViewId.DOCS)
-              .addView(google.picker.ViewId.DOCUMENTS)
-              .addView(google.picker.ViewId.PRESENTATIONS),
+              .addView(google.picker.ViewId.PRESENTATIONS)
+              .addView(google.picker.ViewId.PDFS)
+              .addView(google.picker.ViewId.DOCS_IMAGES)
+              .addView(google.picker.ViewId.FOLDERS),
           )
+          .setOrigin("http://localhost:3000")
           .setCallback(pickerCallback)
           .build();
         picker.setVisible(true);
