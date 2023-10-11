@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   BiRegularBrain,
   BiRegularChat,
@@ -11,9 +10,6 @@ import {
 } from "solid-icons/bi";
 import { Accessor, createSignal, For, Setter, Show } from "solid-js";
 import type { Topic } from "~/types/topics";
-import { FiSettings } from "solid-icons/fi";
-import { FullScreenModal } from "../Atoms/FullScreenModal";
-import { OnScreenThemeModeController } from "../Atoms/OnScreenThemeModeController";
 
 export interface SidebarProps {
   topics: Accessor<Topic[]>;
@@ -31,7 +27,6 @@ export const Sidebar = (props: SidebarProps) => {
 
   const [editingIndex, setEditingIndex] = createSignal(-1);
   const [editingTopic, setEditingTopic] = createSignal("");
-  const [settingsModalOpen, setSettingsModalOpen] = createSignal(false);
   const submitEditText = async () => {
     const topics = props.topics();
     const topic = topics[editingIndex()];
@@ -227,13 +222,6 @@ export const Sidebar = (props: SidebarProps) => {
             <BiRegularLogOut class="h-6 w-6 fill-current" />
             <div>Logout</div>
           </button>
-          <button
-            class="flex w-full items-center space-x-4 rounded-md px-3 py-2 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-            onClick={() => setSettingsModalOpen(true)}
-          >
-            <FiSettings class="color-primary h-6 w-6" />
-            <div>Settings</div>
-          </button>
           <a
             href="https://github.com/StudySphere/studysphere"
             class="flex items-center space-x-1 px-3 py-2"
@@ -258,23 +246,6 @@ export const Sidebar = (props: SidebarProps) => {
           <BiRegularX />
         </div>
       </button>
-
-      <Show when={settingsModalOpen()}>
-        <FullScreenModal
-          isOpen={settingsModalOpen}
-          setIsOpen={setSettingsModalOpen}
-        >
-          <div class="min-w-[250px] sm:min-w-[300px]">
-            <div class="mb-4 text-xl font-bold">Settings</div>
-            <div class="mb-6 flex flex-col space-y-2">
-              <div class="flex w-full items-center justify-between space-x-4">
-                <div>Theme:</div>
-                <OnScreenThemeModeController />
-              </div>
-            </div>
-          </div>
-        </FullScreenModal>
-      </Show>
     </div>
   );
 };
