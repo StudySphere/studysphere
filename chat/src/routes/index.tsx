@@ -70,9 +70,9 @@ export default function Home() {
   });
 
   return (
-    <div class="flex min-h-screen flex-col bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50">
+    <div class="flex min-h-screen flex-col text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50">
       <div class="bg-gradient-radial-t from-magenta-400 p-4">
-        <div class="flex items-center justify-end rounded-lg bg-neutral-50 px-4 py-3 shadow-md dark:bg-neutral-800 sm:justify-between lg:m-auto lg:max-w-5xl">
+        <div class="flex items-center justify-end rounded-lg bg-background px-4 py-3 shadow-md dark:bg-neutral-800 sm:justify-between lg:m-auto lg:max-w-5xl">
           <div class="hidden items-center sm:flex">
             <img
               class="w-10"
@@ -83,15 +83,14 @@ export default function Home() {
             />
             <div>
               <div class="align-top text-lg">
-                <span>Study</span>
-                <span class="text-magenta">Sphere</span>\
+                <span class="text-primaryDark">Study Sphere</span>\
               </div>
             </div>
           </div>
           <div class="flex items-center gap-4">
             <ThemeModeController />
             <A
-              class="rounded-lg bg-turquoise px-4 py-2 font-semibold dark:text-neutral-900"
+              class="rounded-lg bg-secondary px-4 py-2 font-semibold dark:text-neutral-900"
               href={isLogin() ? "/chat" : "/register"}
             >
               Chat Now
@@ -102,8 +101,7 @@ export default function Home() {
         <div class="flex flex-col items-center space-y-8">
           <div>
             <div class="text-5xl md:text-6xl">
-              <span>Study</span>
-              <span class="text-magenta">Sphere</span>
+              <span class="text-primaryDark">Study Sphere</span>
             </div>
           </div>
           <p class="text-center text-lg">
@@ -111,7 +109,7 @@ export default function Home() {
             insights.
           </p>
           <A
-            class="rounded-lg bg-turquoise px-4 py-2 font-semibold text-black shadow-md"
+            class="rounded-lg bg-secondary px-4 py-2 font-semibold text-black shadow-md"
             href={"/chat"}
           >
             Chat with me!
@@ -119,7 +117,7 @@ export default function Home() {
         </div>
       </div>
       <div class="flex-1" />
-      <footer class="mt-14 flex flex-col items-center bg-gradient-radial-b from-magenta pb-4 pt-20">
+      <footer class="bg-gradient-radial-b mt-14 flex flex-col items-center from-magenta pb-4 pt-20">
         <div class="flex items-center">
           <img
             class="w-14"

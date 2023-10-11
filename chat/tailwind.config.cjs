@@ -10,13 +10,6 @@ module.exports = {
       sans: ["Quicksand", "sans-serif"],
     },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-radial-t":
-          "radial-gradient(farthest-side at 50% -50%, var(--tw-gradient-stops))",
-        "gradient-radial-b":
-          "radial-gradient(farthest-side at 50% 150%, var(--tw-gradient-stops))",
-      },
       colors: {
         "cod-gray": {
           DEFAULT: "#0C0C0C",
@@ -88,6 +81,19 @@ module.exports = {
           800: "#321338",
           900: "#0C050E",
           950: "#000000",
+        },
+        primary: {
+          DEFAULT: "#f9cfd0",
+        },
+        primaryDark: {
+          DEFAULT: "#ee7779",
+        },
+        secondary: {
+          DEFAULT: "#ffe0a7ff",
+        },
+        background: {
+          // DEFAULT: "f5f3ed",
+          DEFAULT: "000",
         },
       },
     },

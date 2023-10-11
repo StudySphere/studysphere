@@ -16,11 +16,11 @@ const ResetPassword = () => {
     <div class="flex h-screen w-screen items-center justify-center bg-neutral-50 px-10 dark:bg-neutral-800">
       <div class="flex w-full max-w-sm flex-col space-y-2 text-neutral-900 dark:text-neutral-50">
         <a href="/" class="flex flex-col items-center">
-          <img src="/Logo.png" alt="Arguflow Logo" class="mx-auto my-2" />
+          <img src="/logo.png" alt="Study Sphere Logo" class="mx-auto my-2" />
         </a>
         <Show when={!getEmailSent()}>
           <div class="text-center text-2xl font-bold">
-            <span class="py-2">Reset Your Arguflow Chat Password</span>
+            <span class="py-2">Reset Your Study Sphere Chat Password</span>
           </div>
           <div class="text-center text-red-500">{getErrorMessage()}</div>
           <form class="flex flex-col space-y-4">

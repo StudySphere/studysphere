@@ -22,8 +22,8 @@ const Register = () => {
       <div class="flex w-full max-w-sm flex-col space-y-2 text-neutral-900 dark:text-neutral-50">
         <A href="/" class="flex flex-col items-center">
           <img
-            src="/Logo.png"
-            alt="Arguflow Logo"
+            src="/logo.png"
+            alt="Study Sphere Logo"
             class="mx-auto my-2"
             elementtiming={""}
             fetchpriority={"auto"}
@@ -31,7 +31,7 @@ const Register = () => {
         </A>
         <Show when={!getEmailSent()}>
           <div class="text-center text-2xl font-bold">
-            <span class="py-2">Register for Arguflow Chat</span>
+            <span class="py-2">Register for Study Sphere Chat</span>
           </div>
           <div class="text-center text-red-500">{getErrorMessage()}</div>
           <Show when={getErrorMessage().toLowerCase().includes("already")}>
