@@ -165,8 +165,8 @@ def oauth2callback():
     resp = flask.make_response(
         flask.redirect(
             "https://studysphere-parser.arguflow.ai/auth_success?state="
-            + json.dumps(credentials_to_dict(credentials))x
-        ),
+            + json.dumps(credentials_to_dict(credentials))
+        )
     )
     resp.set_cookie(
         "google_credentials",
