@@ -47,30 +47,35 @@ def upload_data(drive, filesIds, cookies):
             file["mimeType"] == "application/vnd.google-apps.document"
             or file["mimeType"] == "application/vnd.google-apps.presentation"
         ):
-            request = drive.files().export_media(fileId=file_id, mimeType="text/plain")
-            binfile = io.BytesIO(request.execute())
-            binfile.seek(0)
-            docfile = binfile.read().decode("utf-8")
-            doc = nlp(docfile)
-            combined_list = [
-                doc[i].text + " " + doc[i + 1].text
-                for i in range(0, len(list(doc.sents)), 20)
-            ]
-
-            for chunk in combined_list:
-                body = {
-                    "cardHtml": chunk,
-                    "link": file["webViewLink"],
-                    "tags": [file["mimeType"]],
-                    "private": True,
-                }
-                requests.post(
-                    "https://studysphere-api.arguflow.ai/api/v1/card",
-                    json=body,
-                    cookies={
-                        "vault": cookies.get("vault"),
-                    },
+            try:
+                request = drive.files().export_media(
+                    fileId=file_id, mimeType="text/plain"
                 )
+                binfile = io.BytesIO(request.execute())
+                binfile.seek(0)
+                docfile = binfile.read().decode("utf-8")
+                doc = nlp(docfile)
+                combined_list = [
+                    doc[i].text + " " + doc[i + 1].text
+                    for i in range(0, len(list(doc.sents)), 20)
+                ]
+
+                for chunk in combined_list:
+                    body = {
+                        "cardHtml": chunk,
+                        "link": file["webViewLink"],
+                        "tags": [file["mimeType"]],
+                        "private": True,
+                    }
+                    requests.post(
+                        "https://studysphere-api.arguflow.ai/api/v1/card",
+                        json=body,
+                        cookies={
+                            "vault": cookies.get("vault"),
+                        },
+                    )
+            except Exception as e:
+                raise Exception("Error while parsing file: " + file)
         else:
             request = drive.files().get_media(fileId=file_id)
             binfile = io.BytesIO(request.execute())
