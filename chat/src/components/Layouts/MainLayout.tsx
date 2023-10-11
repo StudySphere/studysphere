@@ -149,6 +149,10 @@ const MainLayout = (props: LayoutProps) => {
     let finalTopicId = topic_id;
     setStreamingCompletion(true);
 
+    if (quizMode()) {
+      new_message_content = `Give me only five to ten multiple choice and fill in the blank test questions on the subject of ${new_message_content} based on the following notes, and don't include any extra words or suggestions.`;
+    }
+
     if (!finalTopicId) {
       setNewMessageContent("");
       const isNormalTopic = props.isCreatingNormalTopic();
@@ -436,24 +440,29 @@ const MainLayout = (props: LayoutProps) => {
             </Show>
 
             <div class="flex w-full flex-col">
-              <button
-                onClick={() => {
-                  setQuizMode((quizMode) => !quizMode);
-                }}
-                classList={{
-                  "my-2 flex max-w-fit flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700":
-                    true,
-                  // "flex items-center space-x-4 py-2 w-full rounded-md": true,
-                  "bg-secondary dark:bg-neutral-700": quizMode(),
-                }}
-              >
-                <div class="flex flex-row items-center space-x-2">
-                  <span class="text-xl">
-                    <BsPencilFill />
-                  </span>
-                  <span>Quiz mode</span>
-                </div>
-              </button>
+              <div class="flex items-center">
+                <button
+                  onClick={() => {
+                    setQuizMode((quizMode) => !quizMode);
+                  }}
+                  classList={{
+                    "my-2 flex max-w-fit flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700":
+                      true,
+                    // "flex items-center space-x-4 py-2 w-full rounded-md": true,
+                    "bg-secondary dark:bg-neutral-700": quizMode(),
+                  }}
+                >
+                  <div class="flex flex-row items-center space-x-2">
+                    <span class="text-xl">
+                      <BsPencilFill />
+                    </span>
+                    <span>Quiz mode</span>
+                  </div>
+                </button>
+                <Show when={quizMode()}>
+                  <p class="pl-3">Insert the topic you want to quiz on:</p>
+                </Show>
+              </div>
               <div class="flex w-full flex-row space-x-2">
                 <form class="relative flex h-fit max-h-[calc(100vh-32rem)] w-full flex-col items-center overflow-y-auto rounded-xl bg-neutral-50 py-1 pl-4 pr-6 text-neutral-800 dark:bg-neutral-700 dark:text-white">
                   <button
