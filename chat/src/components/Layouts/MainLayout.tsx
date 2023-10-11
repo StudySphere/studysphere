@@ -383,7 +383,7 @@ const MainLayout = (props: LayoutProps) => {
             </For>
           </div>
 
-          <div class="fixed bottom-0 right-0 flex w-full flex-col items-center space-y-4 via-zinc-200 to-zinc-100 p-4 dark:via-zinc-800 dark:to-zinc-900 lg:w-4/5">
+          <div class="dark:via-zinc-800 dark:to-zinc-900 fixed bottom-0 right-0 flex w-full flex-col items-center space-y-4 via-zinc-200 to-zinc-100 p-4 lg:w-4/5">
             <Show when={messages().length > 0}>
               <div class="flex w-full justify-center">
                 <Show when={!streamingCompletion()}>
@@ -429,7 +429,7 @@ const MainLayout = (props: LayoutProps) => {
                 </Show>
                 <Show when={!atMessageBottom()}>
                   <button
-                    class="ml-auto flex w-fit items-center justify-center space-x-4 rounded-full bg-neutral-50 p-2 text-sm dark:bg-neutral-700 dark:text-white"
+                    class="dark:bg-neutral-700 dark:text-white ml-auto flex w-fit items-center justify-center space-x-4 rounded-full bg-neutral-50 p-2 text-sm"
                     onClick={() => {
                       scrollToBottomOfMessages();
                     }}
@@ -450,7 +450,6 @@ const MainLayout = (props: LayoutProps) => {
                   classList={{
                     "my-2 flex max-w-fit flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700":
                       true,
-                    // "flex items-center space-x-4 py-2 w-full rounded-md": true,
                     "bg-secondary dark:bg-neutral-700": quizMode(),
                   }}
                 >
@@ -465,8 +464,8 @@ const MainLayout = (props: LayoutProps) => {
                   <p class="pl-3">Insert the topic you want to quiz on:</p>
                 </Show>
               </div>
-              <div class="flex w-full flex-row space-x-2">
-                <form class="relative flex h-fit max-h-[calc(100vh-32rem)] w-full flex-col items-center overflow-y-auto rounded-xl bg-neutral-50 py-1 pl-4 pr-6 text-neutral-800 dark:bg-neutral-700 dark:text-white">
+              <div class="flex w-full flex-row">
+                <form class="relative flex h-fit max-h-[calc(100vh-32rem)] w-full flex-col items-center overflow-y-auto overflow-x-hidden rounded-xl bg-neutral-50 py-1 pl-4 pr-6 text-neutral-800">
                   <button
                     classList={{
                       "flex h-10 w-10 items-center justify-center absolute left-[0px] bottom-0":
@@ -483,7 +482,7 @@ const MainLayout = (props: LayoutProps) => {
                   </button>
                   <textarea
                     id="new-message-content-textarea"
-                    class="ml-10 w-full resize-none whitespace-pre-wrap bg-transparent py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none dark:bg-neutral-700 dark:text-white dark:scrollbar-track-neutral-700 dark:scrollbar-thumb-neutral-600"
+                    class="ml-10 w-full resize-none whitespace-pre-wrap bg-transparent py-1 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md focus:outline-none"
                     placeholder="Write a question or prompt for the assistant..."
                     value={newMessageContent()}
                     disabled={streamingCompletion()}

@@ -42,9 +42,9 @@ export default function Home() {
   });
 
   return (
-    <div class="flex min-h-screen flex-col text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50">
+    <div class="dark:bg-neutral-900 dark:text-neutral-50 flex min-h-screen flex-col text-neutral-900">
       <div class="bg-gradient-radial-t from-magenta-400 p-4">
-        <div class="flex items-center justify-end rounded-lg bg-beige px-4 py-3 shadow-md dark:bg-neutral-800 sm:justify-between lg:m-auto lg:max-w-5xl">
+        <div class="dark:bg-neutral-800 flex items-center justify-end rounded-lg bg-beige px-4 py-3 shadow-md sm:justify-between lg:m-auto lg:max-w-5xl">
           <div class="hidden items-center sm:flex">
             <img
               class="w-10"
@@ -55,9 +55,8 @@ export default function Home() {
             />
           </div>
           <div class="flex items-center gap-4">
-            <ThemeModeController />
             <A
-              class="rounded-lg bg-secondary px-4 py-2 font-semibold dark:text-neutral-900"
+              class="dark:text-neutral-900 rounded-lg bg-secondary px-4 py-2 font-semibold"
               href={isLogin() ? "/chat" : "/register"}
             >
               Chat Now

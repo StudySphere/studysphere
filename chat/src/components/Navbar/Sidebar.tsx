@@ -88,9 +88,17 @@ export const Sidebar = (props: SidebarProps) => {
   };
 
   return (
-    <div class="absolute z-50 flex h-screen w-screen flex-row bg-beige dark:text-gray-50 lg:relative lg:w-full">
-      <div class="flex h-full w-2/3 flex-col bg-beige-900 dark:bg-neutral-800 lg:w-full">
+    <div class="dark:text-gray-50 absolute z-50 flex h-screen w-screen flex-row bg-beige lg:relative lg:w-full">
+      <div class="dark:bg-neutral-800 flex h-full w-2/3 flex-col bg-beige-900 lg:w-full">
         <div class="flex w-full flex-col space-y-2 px-2 py-2 ">
+          <a href="/" class="flex items-center space-x-1 px-3 py-2">
+            <div class="flex items-center">
+              <img class="max-w-[50px]" src="./logo.png" />
+              <div class="pl-2 text-lg">
+                <span>StudySphere</span>
+              </div>
+            </div>
+          </a>
           <button
             onClick={() => {
               props.setIsCreatingNormalTopic(true);
@@ -98,7 +106,7 @@ export const Sidebar = (props: SidebarProps) => {
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
-            class="flex w-full flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
+            class="dark:border-neutral-400 dark:hover:bg-neutral-700 flex w-full flex-row items-center rounded-md border border-black px-3  py-1 hover:bg-neutral-200"
           >
             <div class="flex flex-row items-center space-x-2">
               <span class="text-xl">
@@ -114,7 +122,7 @@ export const Sidebar = (props: SidebarProps) => {
               props.setCurrentTopic(undefined);
               props.setSideBarOpen(false);
             }}
-            class="flex w-full flex-row items-center rounded-md border border-black px-3 py-1 hover:bg-neutral-200  dark:border-neutral-400 dark:hover:bg-neutral-700"
+            class="dark:border-neutral-400 dark:hover:bg-neutral-700 flex w-full flex-row items-center rounded-md border border-black px-3  py-1 hover:bg-neutral-200"
           >
             <div class="flex flex-row items-center space-x-2">
               <span class="text-xl">
@@ -124,7 +132,7 @@ export const Sidebar = (props: SidebarProps) => {
             </div>
           </button>
         </div>
-        <div class="flex w-full flex-col space-y-2 overflow-y-auto overflow-x-hidden px-2 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+        <div class="dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 flex w-full flex-col space-y-2 overflow-y-auto overflow-x-hidden px-2 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 scrollbar-track-rounded-md scrollbar-thumb-rounded-md">
           <For each={props.topics()}>
             {(topic, index) => (
               <button
@@ -155,7 +163,7 @@ export const Sidebar = (props: SidebarProps) => {
                           void submitEditText();
                         }
                       }}
-                      class="w-full rounded-md bg-neutral-50 px-2 py-1 dark:bg-neutral-800"
+                      class="dark:bg-neutral-800 w-full rounded-md bg-neutral-50 px-2 py-1"
                     />
 
                     <div class="flex flex-row space-x-1 pl-2 text-2xl ">
@@ -208,9 +216,9 @@ export const Sidebar = (props: SidebarProps) => {
           </For>
         </div>
         <div class="flex-1 " />
-        <div class="flex w-full flex-col space-y-1 border-t px-2 py-2 dark:border-neutral-400">
+        <div class="dark:border-neutral-400 flex w-full flex-col space-y-1 border-t px-2 py-2">
           <button
-            class="flex w-full items-center space-x-4  rounded-md px-3 py-2 hover:bg-neutral-200   dark:hover:bg-neutral-700"
+            class="dark:hover:bg-neutral-700 flex w-full items-center  space-x-4 rounded-md px-3 py-2   hover:bg-neutral-200"
             onClick={() => {
               props.setOpeniFrame(true);
               props.setUploadingFiles(true);
@@ -220,23 +228,12 @@ export const Sidebar = (props: SidebarProps) => {
             <div>Upload Files</div>
           </button>
           <button
-            class="flex w-full items-center space-x-4 rounded-md px-3 py-2 hover:bg-neutral-200   dark:hover:bg-neutral-700"
+            class="dark:hover:bg-neutral-700 flex w-full items-center space-x-4 rounded-md px-3 py-2   hover:bg-neutral-200"
             onClick={logout}
           >
             <BiRegularLogOut class="h-6 w-6 fill-current" />
             <div>Logout</div>
           </button>
-          <a
-            href="https://github.com/StudySphere/studysphere"
-            class="flex items-center space-x-1 px-3 py-2"
-          >
-            <div class="flex items-center">
-              <img class="max-w-[50px]" src="./logo.png" />
-              <div class="pl-2 text-lg">
-                <span>StudySphere</span>
-              </div>
-            </div>
-          </a>
         </div>
       </div>
       <button
