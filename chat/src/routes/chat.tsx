@@ -229,6 +229,7 @@ export const chat = () => {
             selectedTopic={selectedTopic}
             setOpeniFrame={setOpeniFrame}
             setGetSpecficFiles={setGetSpecficFiles}
+            docText={docText}
           />
         </div>
       </div>

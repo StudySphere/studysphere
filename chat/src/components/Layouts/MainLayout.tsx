@@ -31,6 +31,7 @@ export interface LayoutProps {
   selectedTopic: Accessor<Topic | undefined>;
   setOpeniFrame: Setter<boolean>;
   setGetSpecficFiles: Setter<boolean>;
+  docText: Accessor<string[]>;
 }
 
 const scrollToBottomOfMessages = () => {
