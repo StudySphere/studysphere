@@ -44,7 +44,7 @@ def upload_data(drive, filesIds, cookies):
     for file_id in filesIds:
         file = (
             drive.files()
-            .get(fileId=file_id, fields="file(webViewLink, mimeType)")
+            .get(fileId=file_id, fields="files(webViewLink, mimeType)")
             .execute()
         )
         if (
