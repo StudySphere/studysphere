@@ -33,7 +33,11 @@ app = flask.Flask(__name__)
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config["SESSION_COOKIE_DOMAIN"] = "studysphere-parser.arguflow.ai"
-CORS(app, supports_credentials=True, resources={r"*": {"origins": "*"}})
+CORS(
+    app,
+    supports_credentials=True,
+    resources={r"*": {"origins": "http://localhost:3000"}},
+)
 
 
 def upload_data(drive, filesIds, cookies):
