@@ -75,7 +75,7 @@ def upload_data(drive, filesIds, cookies):
                         },
                     )
             except Exception as e:
-                raise Exception("Error while parsing file: " + file)
+                raise Exception("Error while parsing file: " + json.dumps(file))
         else:
             request = drive.files().get_media(fileId=file_id)
             binfile = io.BytesIO(request.execute())
