@@ -57,14 +57,13 @@ def upload_data(drive, filesIds, cookies):
                 for i in range(0, len(list(doc.sents)), 20)
             ]
 
-            body = {
-                "cardHtml": chunk,
-                "link": file["webViewLink"],
-                "tags": [file["mimeType"]],
-                "private": True,
-            }
-
             for chunk in combined_list:
+                body = {
+                    "cardHtml": chunk,
+                    "link": file["webViewLink"],
+                    "tags": [file["mimeType"]],
+                    "private": True,
+                }
                 requests.post(
                     "https://studysphere-api.arguflow.ai/api/v1/card",
                     json=body,
@@ -82,14 +81,14 @@ def upload_data(drive, filesIds, cookies):
                 doc[i].text + " " + doc[i + 1].text
                 for i in range(0, len(list(doc.sents)), 20)
             ]
-            body = {
-                "cardHtml": chunk,
-                "link": file["webViewLink"],
-                "tags": [file["mimeType"]],
-                "private": True,
-            }
 
             for chunk in combined_list:
+                body = {
+                    "cardHtml": chunk,
+                    "link": file["webViewLink"],
+                    "tags": [file["mimeType"]],
+                    "private": True,
+                }
                 requests.post(
                     "https://studysphere-api.arguflow.ai/api/v1/card",
                     json=body,
