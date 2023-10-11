@@ -43,9 +43,7 @@ CORS(
 def upload_data(drive, filesIds, cookies):
     for file_id in filesIds:
         file = (
-            drive.files()
-            .get(fileId=file_id, fields="files(webViewLink, mimeType)")
-            .execute()
+            drive.files().get(fileId=file_id, fields="webViewLink, mimeType").execute()
         )
         if (
             file["mimeType"] == "application/vnd.google-apps.document"
