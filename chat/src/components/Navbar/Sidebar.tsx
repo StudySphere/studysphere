@@ -222,7 +222,7 @@ export const Sidebar = (props: SidebarProps) => {
             onClick={() => props.setOpeniFrame(true)}
           >
             <BiRegularUpload class="h-6 w-6 fill-current" />
-            <div>Upload Files</div>
+            <div>Upload Notes</div>
           </button>
           <button
             class="dark:hover:bg-neutral-700 flex w-full items-center space-x-4 rounded-md px-3 py-2   hover:bg-neutral-200"
