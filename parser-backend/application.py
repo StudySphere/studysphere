@@ -58,18 +58,20 @@ def upload_data(drive, filesIds, js):
                 docfile = binfile.read().decode("utf-8")
                 doc = nlp(docfile)
                 combined_list = [
-                    doc[i].text + " " + doc[i + 1].text
+                    list(doc.sents)[i : i + 20]
                     for i in range(0, len(list(doc.sents)), 20)
                 ]
-
-                for chunk in combined_list:
+                combined_sents = [
+                    " ".join([str(sent) for sent in chunk]) for chunk in combined_list
+                ]
+                for chunk in combined_sents:
                     body = {
-                        "cardHtml": chunk,
+                        "card_html": chunk,
                         "link": file["webViewLink"],
                         "tags": [file["mimeType"]],
                         "private": True,
                     }
-                    requests.post(
+                    r = requests.post(
                         "https://studysphere-backend.arguflow.ai/api/card",
                         json=body,
                         headers={
@@ -85,18 +87,20 @@ def upload_data(drive, filesIds, js):
             docfile = binaryFile["content"].strip()
             doc = nlp(docfile)
             combined_list = [
-                doc[i].text + " " + doc[i + 1].text
-                for i in range(0, len(list(doc.sents)), 20)
+                list(doc.sents)[i : i + 20] for i in range(0, len(list(doc.sents)), 20)
+            ]
+            combined_sents = [
+                " ".join([str(sent) for sent in chunk]) for chunk in combined_list
             ]
 
-            for chunk in combined_list:
+            for chunk in combined_sents:
                 body = {
-                    "cardHtml": chunk,
+                    "card_html": chunk,
                     "link": file["webViewLink"],
                     "tags": [file["mimeType"]],
                     "private": True,
                 }
-                requests.post(
+                r = requests.post(
                     "https://studysphere-backend.arguflow.ai/api/card",
                     json=body,
                     cookies={
@@ -122,7 +126,7 @@ def upload_gdrive():
     )
 
     fileIds = flask.request.json["filesIds"]
-    upload_data(drive, fileIds, flask.request.json)
+    Thread(target=upload_data, args=(drive, fileIds, flask.request.json)).start()
     # Thread(target=upload_data, args=(drive, fileIds, flask.request.json)).start()
     flask.session["google_credentials"] = credentials_to_dict(credentials)
     return flask.make_response("Success", 200)
